@@ -1,0 +1,182 @@
+\documentclass[11pt,a4paper]{article}
+
+% ===== Pacotes básicos =====
+\usepackage[english]{babel}
+\usepackage{fontspec} % para XeLaTeX/LuaLaTeX
+\setmainfont{Times New Roman}
+
+\usepackage[margin=1.8cm]{geometry}
+\usepackage{setspace}
+\setstretch{1.15}
+
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{amsmath, amssymb}
+\usepackage{csquotes}
+\usepackage{xcolor}
+
+\usepackage{graphicx}      % Para inserir figuras
+\usepackage{caption}       % Para legendas
+
+% ===== Referências =====
+\usepackage[backend=biber,style=apa,maxcitenames=2,uniquename=false]{biblatex}
+\addbibresource{ref/zotero_refs.bib}
+
+% ===== Data e hiperlinks =====
+\usepackage[english]{datetime2}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+% =======================
+% Informações do artigo
+% =======================
+\title{Deformation analysis of the Alqueva dam using EGMS InSAR data}
+
+% Lista de autores com letras para afiliações
+\author{
+Tiago Henrique, %$^{a}$, 
+Rui Carrilho Gomes, %$^{b}$, 
+Ana Paula Falcão %$^{c}$ \\
+%\\
+%$^{a}$Instituto Superior Técnico, Lisbon, Portugal \\
+%$^{b}$Instituto Superior Técnico, Lisbon, Portugal \\
+%$^{c}$Instituto Superior Técnico, Lisbon, Portugal
+}
+
+\date{\today}
+
+
+% =======================
+% Documento
+% =======================
+\begin{document}
+
+\maketitle
+
+\noindent\textbf{Keywords:} Geotechnical structures behaviour, Earth observation data, Machine learning, Pattern detection, Dam monitoring
+
+\begin{abstract}
+Understanding and predicting the behaviour of geotechnical structures is still a complex challenge. Traditional methods often fail to fully capture the complexities of these structures, which include challenges such as slope instabilities, dam behaviour, and landslides. To address these issues, significant advances have been made in Earth observation techniques, such as radar interferometry and satellite imagery, as well as in machine learning tools. These developments have provided new opportunities for monitoring and predictive modelling.
+This review explores the application of Earth observation techniques, such as InSAR, for detecting ground displacement and deformation. It also examines the role of machine learning in analysing large datasets, detecting patterns and anomalies, and predicting potential geotechnical failures. Despite these advancements, challenges remain, particularly regarding the reliance on high-quality data and the integration of advanced algorithms into practical applications.
+
+\end{abstract}
+
+\section{Introduction}
+Geotechnical structures play a critical role in infrastructure and environmental management worldwide. Understanding the behaviour of these structures under varying environmental and operational conditions is essential for ensuring their safety, longevity, and performance. Dams, for example, are integral to water storage, flood control, and hydroelectric energy generation, with their stability being paramount to avoiding catastrophic failures. Over the years, traditional methods have been employed to monitor and assess the health of these structures, relying primarily on physical inspections and direct measurements. However, these methods often face limitations due to the complexity of geotechnical phenomena, such as ground deformation, structural movements, and other dynamic processes that are not easily captured using conventional techniques.
+In recent years, significant advancements have been made in Earth observation technologies, including synthetic aperture radar interferometry (InSAR), satellite imagery, and remote sensing tools. These technologies provide valuable insights into the performance of geotechnical structures, allowing for the detection of ground displacement, deformations, and changes in the surrounding environment over time. Furthermore, the application of machine learning techniques has revolutionized the analysis of large and complex datasets, enabling the detection of patterns and anomalies that may indicate potential risks or structural failures.
+This review aims to explore the current state of knowledge regarding the behaviour of geotechnical structures, with a particular focus on concrete dams. It delves into the role of Earth observation techniques and machine learning in monitoring these structures, detecting early signs of potential failure, and improving predictive modelling. By reviewing recent studies, we will examine how these technologies are transforming geotechnical monitoring and providing new opportunities for risk mitigation and safety enhancement.
+
+
+\section{InSAR}
+
+\subsection{Literature review}
+
+\subsubsection{Fundamentals of InSAR and Earth Observation}
+\begin{itemize}
+    \item Princípios físicos do radar de abertura sintética (SAR)
+    \item Conceitos de interferometria e linha de visada (LOS)
+    \item Tipos de órbitas: ascendente e descendente
+    \item Erros e correções típicas (atmosfera, ruído, baseline)
+\end{itemize}
+
+The integration of advanced monitoring techniques, particularly through satellite imagery and machine learning, has revolutionized the way we study and monitor geotechnical structures. These technologies allow for real-time monitoring, better prediction of failures, and more effective intervention strategies, ensuring the safety and stability of vital infrastructure.
+
+
+Recently, earth observation techniques, such as radar interferometry and satellite imagery, have become essential tools for monitoring geotechnical structures~\parencite{salcedo-sanzMachineLearningInformation2020,simoesSatelliteImageTime2021}. These methods enable large-scale, continuous observation, offering valuable insights into displacement, deformation, and geohazard detection. Time-series from earth observation data are particularly useful for uncovering long-term patterns of ground displacement, providing a better understanding of subsidence and deformation processes, and enabling monitoring at a regional or even global scale. Compared to traditional in-situ methods, these techniques offer unprecedented scalability and continuity.
+
+\subsubsection{Interferometric techniques and time-series approaches}
+\begin{itemize}
+    \item Séries temporais (SBAS, PSI)
+    \item Aplicações em monitoramento de estruturas e movimentos do terreno
+    \item Referências sobre decomposição vertical/horizontal
+\end{itemize}
+
+Among the most widely used techniques, Interferometric Synthetic Aperture Radar (InSAR) has gained prominence for its ability to detect ground displacement with high precision \parencite{tomasEarthObservationsGeohazards2017}. According to \textcite{sousaGeohazardsMonitoringAssessment2021}, “Results from both the processing and analysis of a dataset of Earth observation (EO) multi-source data support the conclusion that geohazards can be identified, studied, and monitored effectively using new techniques applied to multi-source EO data.”
+
+Within the InSAR family, several specialized techniques have been developed to enhance temporal and spatial precision. Differential InSAR (DInSAR) provides highly accurate surface deformation measurements over time, making it suitable for monitoring slow-moving geotechnical phenomena \parencite{derauwOngoingAutomatedGround2020}. The Persistent Scatterer InSAR (PSInSAR) technique is particularly effective for detecting subtle and long-term ground movements by analysing stable reflectors that maintain coherence over time \parencite{hariri-ardebiliAdvancesDamEngineering2020}. Meanwhile, the Small Baseline Subset (SBAS) approach minimizes spatial and temporal baselines between image pairs, improving temporal coherence and reducing decorrelation, making it especially suitable for localized deformation studies \parencite{parkNonlinearModelingSubsidence2021}.
+
+More recently, these methods have been extended to advanced displacement modelling and calibration workflows \parencite{schloglComprehensiveTimeseriesAnalysis2021,tu2023}, allowing for a more robust estimation of three-dimensional ground motion and improved interpretation of geotechnical processes.
+
+\subsubsection{Clustering and data mining in InSAR}
+\begin{itemize}
+    \item Objetivo: identificar padrões espaciais ou temporais em deformações
+    \item Métodos:
+    \begin{itemize}
+        \item K-Means: agrupamento baseado em magnitudes médias
+        \item Hierarchical Clustering: agrupamento baseado em similaridade completa
+        \item Dynamic Time Warping (DTW): agrupamento de séries temporais não lineares
+    \end{itemize}
+    \item Comparação entre métodos, vantagens e limitações
+\end{itemize}
+
+\subsubsection{Applications in geotechnical monitoring}
+The application of InSAR-based techniques has expanded rapidly across various geotechnical domains. They have been successfully used for monitoring the structural integrity of dams, slopes, tunnels, and embankments, as well as for detecting subsidence in urban areas and mining regions.
+
+Several studies demonstrate the effectiveness of these techniques for geotechnical monitoring: \textcite{schloglComprehensiveTimeseriesAnalysis2021} applied InSAR time-series to evaluate dam settlements; \textcite{roque2023} integrated InSAR and geomechanical modelling for slope stability assessment; and \textcite{maes2025} explored the use of EGMS data for infrastructure deformation mapping. More recent works, such as \textcite{giordano2025}, highlight the growing potential of multi-source Earth observation data and machine learning integration for predictive geohazard analysis.
+
+\subsection{Displacements calculation and validation}
+
+\subsubsection{Case study overview}
+The case study focuses on the assessment of surface displacements obtained from the European Ground Motion Service (EGMS) and their validation against orthophoto-derived measurements. The study area corresponds to a monitored geotechnical structure — the Alqueva Dam, a double-curvature concrete arch dam located in the Alentejo region, southern Portugal. It is one of the largest dams in Western Europe, standing approximately 96 meters high with a crest length of 458 meters, forming a key element of Portugal’s hydro-agricultural system. The foundation consists of green schists on the right bank and phyllites on the left bank.
+
+The EGMS data used in this study include both ascending and descending Line-of-Sight (LOS) products, which represent ground displacements along the radar viewing direction. These LOS measurements were decomposed into vertical (Up–Down) and horizontal (East–West) components, enabling direct comparison with reference displacements derived from orthophotogrammetry (hereafter referred to as “Ortho”).
+
+Additionally, the study employed a Digital Elevation Model (DEM) and related metadata to account for topographic effects and to support geometric corrections. The combination of Calibrated (ascending and descending) EGMS products with ORTHO displacements allows for a comprehensive evaluation of both the vertical and horizontal deformation behavior of the structure. This integrated approach provides valuable insights into the dam’s mechanical response and contributes to the validation of satellite-based ground motion measurements in complex geotechnical settings.
+
+\begin{figure}[h!]          % h! tenta colocar a figura aqui
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/planta.png}  % caminho para o ficheiro da figura
+    \caption{View of the Alqueva Dam.}
+    \label{fig:planta}     % para referência no texto
+\end{figure}
+
+As shown in Figure~\ref{fig:planta}, the dam structure is...
+
+\begin{figure}[h!]          % h! tenta colocar a figura aqui
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/planta2.jpg}  % caminho para o ficheiro da figura
+    \caption{View of the Alqueva Dam.}
+    \label{fig:planta2}     % para referência no texto
+\end{figure}
+
+
+\subsubsection{Decomposition of Line-of-Sight displacements}
+
+To derive the vertical (dV) and horizontal (dH) displacement components over the Alqueva dam, a dedicated processing workflow was implemented using Python and geospatial libraries (Pandas, GeoPandas, NumPy, SciPy).
+The procedure combines calibrated ascending (ASC) and descending (DESC) InSAR datasets from the EGMS Level-2b product and validates the decomposed components against the orthogonal vertical (U) and east–west (E) displacements provided by the EGMS Level-3 (ORTHO) product.
+
+\paragraph{Data reading and spatial filtering}
+
+The calibrated ASC, DESC, and ORTHO datasets were imported into Python and spatially filtered to the dam and its immediate surroundings, defined by fixed coordinate limits in the ETRS89-LAEA (EPSG:3035) projection.
+This ensured consistent spatial referencing across all datasets and reduced the computational load to the relevant monitoring area.
+
+\begin{figure}[h!]  % h! tenta colocar a figura aqui
+    \centering
+    \includegraphics[width=\textwidth]{figures/asc_desc_points.jpg}  % largura total
+    \caption{View of the Alqueva Dam.}
+    \label{fig:asc_desc}  % referência no texto
+\end{figure}
+
+
+
+\section{Results}
+Present and discuss your results here.
+
+\section{Discussion}
+Interpret and compare your findings.
+
+\section{Conclusion}
+Summarize key points and future work.
+
+%\section{References}
+\setlength{\bibitemsep}{1em}
+\printbibliography
+
+\end{document}

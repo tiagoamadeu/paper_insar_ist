@@ -1,0 +1,19 @@
+[0] Config.pm:328> INFO - This is Biber 2.21
+[0] Config.pm:331> INFO - Logfile is 'paper_insar.blg'
+[106] biber-MSWIN64:342> INFO - === 
+[141] Biber.pm:421> INFO - Reading 'paper_insar.bcf'
+[278] Biber.pm:1002> INFO - Found 12 citekeys in bib section 0
+[298] Biber.pm:4487> INFO - Processing section 0
+[309] Biber.pm:4678> INFO - Looking for bibtex file 'ref/zotero_refs.bib' for section 0
+[381] bibtex.pm:1713> INFO - LaTeX decoding ...
+[838] bibtex.pm:1519> INFO - Found BibTeX data source 'ref/zotero_refs.bib'
+[1024] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[1024] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[1024] Biber.pm:4307> INFO - Sorting list 'apa/apasortcite//global/global/global' of type 'entry' with template 'apa' and locale 'en-US'
+[1025] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[1062] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[1062] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[1062] Biber.pm:4307> INFO - Sorting list 'apa/global//global/global/global' of type 'entry' with template 'apa' and locale 'en-US'
+[1062] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[1078] bbl.pm:676> INFO - Writing 'paper_insar.bbl' with encoding 'UTF-8'
+[1110] bbl.pm:779> INFO - Output to paper_insar.bbl
