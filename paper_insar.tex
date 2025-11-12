@@ -1,31 +1,116 @@
 \documentclass[11pt,a4paper]{article}
 
-% ===== Pacotes básicos =====
+% =======================
+% Pacotes básicos
+% =======================
 \usepackage[english]{babel}
-\usepackage{fontspec} % para XeLaTeX/LuaLaTeX
-\setmainfont{Times New Roman}
+\usepackage{fontspec}          % XeLaTeX/LuaLaTeX
+\setmainfont{Times New Roman}  
 
-\usepackage[margin=1.8cm]{geometry}
-\usepackage{setspace}
+\usepackage[margin=1.8cm]{geometry}  % margens
+\usepackage{setspace}                % espaçamento de linha
 \setstretch{1.15}
 
-\usepackage{graphicx}
-\usepackage{subcaption}
-\usepackage{booktabs}
-\usepackage{multirow}
+% =======================
+% Parágrafos e indentação
+% =======================
+\setlength{\parindent}{0pt}   % remove recuos de parágrafo
+\setlength{\parskip}{0.8em}   % aumenta ligeiramente o espaço entre parágrafos
+
+% =======================
+% Listas sem recuo e sem espaçamento extra
+% =======================
+\usepackage{enumitem}
+\setlist[itemize]{
+    left=1em,       % pequeno recuo à esquerda
+    labelsep=0.5em, % espaço entre o bullet e o texto
+    topsep=0pt,     % remove espaço acima da lista
+    partopsep=0pt, 
+    parsep=0pt,     % remove espaçamento entre parágrafos dentro da lista
+    itemsep=0pt     % remove espaçamento extra entre itens
+}
+\setlist[enumerate]{
+    left=1em,
+    labelsep=0.5em,
+    topsep=0pt,
+    partopsep=0pt,
+    parsep=0pt,
+    itemsep=0pt
+}
+
+
+% =======================
+% Ambientes quote sem recuo
+% =======================
+\usepackage{etoolbox}
+\AtBeginEnvironment{quote}{\parindent0pt \topsep0pt \partopsep0pt}
+\AtBeginEnvironment{quotation}{\parindent0pt \topsep0pt \partopsep0pt}
+
+% =======================
+% Figuras e legendas
+% =======================
+\usepackage{graphicx}      % inserir figuras
+\usepackage{caption}       % legendas
+\usepackage{subcaption}    % subfiguras
+\captionsetup[subfigure]{justification=centering}
+
+% =======================
+% Tabelas
+% =======================
+\usepackage{array}         % tabelas avançadas
+\usepackage{booktabs}      % linhas horizontais bonitas
+\usepackage{multirow}      % células múltiplas
+\usepackage{ragged2e}      % alinhamento de texto em colunas
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+% =======================
+% Matemática
+% =======================
 \usepackage{amsmath, amssymb}
+
+% =======================
+% Títulos sem recuo e run-in para paragraph
+% =======================
+\usepackage{titlesec}
+\titlespacing*{\section}{0pt}{*2}{*1}
+\titlespacing*{\subsection}{0pt}{*2}{*1}
+\titlespacing*{\subsubsection}{0pt}{*1.5}{*0.5}
+\titlespacing*{\paragraph}{0pt}{*1}{*0}[\\]  % run-in + quebra de linha
+\titleformat{\paragraph}[runin]{\bfseries}{\theparagraph}{1em}{}[\\]
+
+% =======================
+% Citações e bibliografia
+% =======================
 \usepackage{csquotes}
-\usepackage{xcolor}
-
-\usepackage{graphicx}      % Para inserir figuras
-\usepackage{caption}       % Para legendas
-
-% ===== Referências =====
 \usepackage[backend=biber,style=apa,maxcitenames=2,uniquename=false]{biblatex}
 \addbibresource{ref/zotero_refs.bib}
 
-% ===== Data e hiperlinks =====
-\usepackage[english]{datetime2}
+
+% =======================
+% Listas com pequeno recuo
+% =======================
+\usepackage{enumitem}
+\setlist[itemize]{
+    left=1em,       % pequeno recuo à esquerda
+    labelsep=0.5em, % espaço entre o bullet e o texto
+    topsep=0pt,     % espaço acima da lista
+    partopsep=0pt, 
+    parsep=0pt, 
+    itemsep=0.5em   % espaço entre itens da lista
+}
+\setlist[enumerate]{
+    left=1em,
+    labelsep=0.5em,
+    topsep=0pt,
+    partopsep=0pt,
+    parsep=0pt,
+    itemsep=0.5em
+}
+
+
+% =======================
+% Hiperlinks
+% =======================
 \usepackage{hyperref}
 \hypersetup{
     colorlinks=true,
@@ -33,6 +118,19 @@
     citecolor=blue,
     urlcolor=blue
 }
+
+% =======================
+% Data
+% =======================
+\usepackage[english]{datetime2}
+
+% =======================
+% Comandos adicionais para alinhamento de parágrafos em tabelas
+% =======================
+\newcolumntype{R}[1]{>{\RaggedLeft\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+
+
 
 % =======================
 % Informações do artigo
@@ -60,17 +158,24 @@ Ana Paula Falcão %$^{c}$ \\
 
 \maketitle
 
+% Desativa o espaçamento extra apenas para título e abstract
+{\setlength{\parskip}{0pt}
 \noindent\textbf{Keywords:} Geotechnical structures behaviour, Earth observation data, Machine learning, Pattern detection, Dam monitoring
 
 \begin{abstract}
 Understanding and predicting the behaviour of geotechnical structures is still a complex challenge. Traditional methods often fail to fully capture the complexities of these structures, which include challenges such as slope instabilities, dam behaviour, and landslides. To address these issues, significant advances have been made in Earth observation techniques, such as radar interferometry and satellite imagery, as well as in machine learning tools. These developments have provided new opportunities for monitoring and predictive modelling.
 This review explores the application of Earth observation techniques, such as InSAR, for detecting ground displacement and deformation. It also examines the role of machine learning in analysing large datasets, detecting patterns and anomalies, and predicting potential geotechnical failures. Despite these advancements, challenges remain, particularly regarding the reliance on high-quality data and the integration of advanced algorithms into practical applications.
-
 \end{abstract}
+}
+
+% Agora ativa o parskip normal para o resto do documento
+\setlength{\parskip}{0.8em}
 
 \section{Introduction}
 Geotechnical structures play a critical role in infrastructure and environmental management worldwide. Understanding the behaviour of these structures under varying environmental and operational conditions is essential for ensuring their safety, longevity, and performance. Dams, for example, are integral to water storage, flood control, and hydroelectric energy generation, with their stability being paramount to avoiding catastrophic failures. Over the years, traditional methods have been employed to monitor and assess the health of these structures, relying primarily on physical inspections and direct measurements. However, these methods often face limitations due to the complexity of geotechnical phenomena, such as ground deformation, structural movements, and other dynamic processes that are not easily captured using conventional techniques.
+
 In recent years, significant advancements have been made in Earth observation technologies, including synthetic aperture radar interferometry (InSAR), satellite imagery, and remote sensing tools. These technologies provide valuable insights into the performance of geotechnical structures, allowing for the detection of ground displacement, deformations, and changes in the surrounding environment over time. Furthermore, the application of machine learning techniques has revolutionized the analysis of large and complex datasets, enabling the detection of patterns and anomalies that may indicate potential risks or structural failures.
+
 This review aims to explore the current state of knowledge regarding the behaviour of geotechnical structures, with a particular focus on concrete dams. It delves into the role of Earth observation techniques and machine learning in monitoring these structures, detecting early signs of potential failure, and improving predictive modelling. By reviewing recent studies, we will examine how these technologies are transforming geotechnical monitoring and providing new opportunities for risk mitigation and safety enhancement.
 
 
@@ -130,20 +235,24 @@ The EGMS data used in this study include both ascending and descending Line-of-S
 
 Additionally, the study employed a Digital Elevation Model (DEM) and related metadata to account for topographic effects and to support geometric corrections. The combination of Calibrated (ascending and descending) EGMS products with ORTHO displacements allows for a comprehensive evaluation of both the vertical and horizontal deformation behavior of the structure. This integrated approach provides valuable insights into the dam’s mechanical response and contributes to the validation of satellite-based ground motion measurements in complex geotechnical settings.
 
-\begin{figure}[h!]          % h! tenta colocar a figura aqui
-    \centering
-    \includegraphics[width=0.7\textwidth]{figures/planta.png}  % caminho para o ficheiro da figura
-    \caption{View of the Alqueva Dam.}
-    \label{fig:planta}     % para referência no texto
-\end{figure}
 
-As shown in Figure~\ref{fig:planta}, the dam structure is...
-
-\begin{figure}[h!]          % h! tenta colocar a figura aqui
+\begin{figure}[h!]
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/planta2.jpg}  % caminho para o ficheiro da figura
-    \caption{View of the Alqueva Dam.}
-    \label{fig:planta2}     % para referência no texto
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/planta.png}
+        %\caption{View from the upstream side.}
+        \label{fig:planta1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/planta2.jpg}
+        %\caption{View from the downstream side.}
+        \label{fig:planta2}
+    \end{subfigure}
+    \caption{Views of the Alqueva Dam from different perspectives.}
+    \label{fig:planta_combined}
 \end{figure}
 
 
@@ -159,18 +268,233 @@ This ensured consistent spatial referencing across all datasets and reduced the 
 
 \begin{figure}[h!]  % h! tenta colocar a figura aqui
     \centering
-    \includegraphics[width=\textwidth]{figures/asc_desc_points.jpg}  % largura total
-    \caption{View of the Alqueva Dam.}
+    \includegraphics[width=\textwidth]{figures/asc_desc_points.png}  % largura total
+    \caption{View of the dam and initial ASC/DESC point distribution maps illustrate the area of interest and the spatial coverage of the datasets.}
     \label{fig:asc_desc}  % referência no texto
 \end{figure}
 
 
+\paragraph{Time-series reshaping}
 
-\section{Results}
-Present and discuss your results here.
+The displacement columns in the ASC, DESC, and ORTHO datasets were reshaped into a long-format table, with one row per spatial point and acquisition date. This format facilitated temporal interpolation and subsequent synchronization of datasets acquired on different dates.
 
-\section{Discussion}
-Interpret and compare your findings.
+
+\paragraph{Temporal interpolation}
+Since ASC and DESC acquisitions are collected on distinct dates, a common set of monthly timestamps was defined. Linear interpolation was applied to generate displacement values for both orbits at the same epoch. This ensured temporal consistency and enabled direct comparison between ASC and DESC measurements.
+
+
+\paragraph{Spatial interpolation (IDW)}
+Since ASC and DESC pixels are not spatially coincident, the DESC displacements were interpolated onto the ASC grid using Inverse Distance Weighting (IDW).
+For each ASC point, the interpolation used the five nearest DESC neighbours within a 150 m radius, weighted by the inverse square of their distance.
+This step also interpolated the incidence angle (θ) and track angle (α) from the DESC geometry, ensuring that both ASC and DESC values correspond to the same ground location.
+
+
+\begin{figure}[h!]  % h! tenta colocar a figura aqui
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/selected_cells.png}  % largura total
+    \caption{VMap of grid cells and points after IDW interpolation, showing the spatial alignment of ASC and DESC points.}
+    \label{fig:cells}  % referência no texto
+\end{figure}
+
+
+\paragraph{Computation of geometric parameters ($\beta$ and $\gamma$)}
+
+Two auxiliary geometric parameters are defined for each interpolated ascending (ASC) point:
+
+\begin{itemize}
+  \item $\beta$ (orbital-geometry term) — computed as:
+  \begin{equation}
+    \beta = \arcsin\left( \cos(I) \cdot \cos(\text{latitude}) \right)
+  \end{equation}
+  where $I = 98.6^{\circ}$ is the Sentinel-1 orbit inclination.  
+  In this work, $\beta$ is used as a geometric correction term derived from the satellite orbital inclination and the point latitude.  
+  It is not a direct measurement of terrain slope aspect (i.e., not DEM-derived).  
+  It accounts for the relative orientation between the satellite orbit plane and the local observation latitude, consistent with the trigonometric formulation implemented in the processing code.
+
+  \item $\gamma$ (cross-track tilt) — represents the local topographic tilt perpendicular to the radar line-of-sight.  
+  Given the relatively flat topography of the dam area, $\gamma$ was set to zero ($\gamma = 0$), which simplifies the decomposition while introducing negligible error for this site.
+\end{itemize}
+
+\noindent
+\textit{Note:} If a DEM-based local slope/aspect correction were applied, $\beta$ would be replaced or augmented by the DEM-derived slope aspect, and $\gamma$ by the DEM-derived cross-track tilt.  
+In this study, those DEM corrections were not used.
+
+\paragraph{Decomposition of Line-of-Sight (LOS) displacements into vertical and horizontal components}
+
+Let $d_{\text{ASC}}$ and $d_{\text{DESC}}$ be the LOS displacements from ascending and descending passes, respectively.  
+Let $\theta_A$, $\theta_D$ be the local incidence angles (angle between LOS and vertical) for ASC and DESC, and $\alpha_A$, $\alpha_D$ their respective orbit azimuth (track) angles.
+
+\noindent The LOS measurements relate to the vertical and east–west horizontal components via:
+\begin{equation}
+\begin{cases}
+d_{\text{ASC}} = -d_V \cos\theta_A + d_H \sin\theta_A \cos(\alpha_A + \beta + \gamma) \\
+d_{\text{DESC}} = -d_V \cos\theta_D + d_H \sin\theta_D \cos(\alpha_D + \beta + \gamma)
+\end{cases}
+\end{equation}
+
+\noindent Solving this $2\times2$ trigonometric system yields the vertical and horizontal components:
+\begin{equation}
+d_V = \frac{d_{\text{DESC}} \sin\theta_A \cos(\beta - \gamma) + d_{\text{ASC}} \sin\theta_D \cos(\beta + \gamma)}
+{\cos\theta_A \sin\theta_D \cos(\beta - \gamma) + \cos\theta_D \sin\theta_A \cos(\beta + \gamma)}
+\end{equation}
+
+\begin{equation}
+d_H = \frac{d_{\text{DESC}} \cos\theta_A - d_{\text{ASC}} \cos\theta_D}
+{\cos\theta_A \sin\theta_D \cos(\beta - \gamma) + \cos\theta_D \sin\theta_A \cos(\beta + \gamma)}
+\end{equation}
+
+\noindent These expressions match the implementation used in the processing code (with $\gamma = 0$ for this study).
+
+Assumptions and implications:
+
+\begin{itemize}
+  \item $\beta$ interpretation: $\beta$ is defined as an orbital-geometry term computed from orbit inclination and latitude (not DEM slope aspect). This matches the code implementation and avoids confusion with terrain aspect.
+  \item $\gamma = 0$: Assuming zero cross-track tilt is reasonable for the relatively flat dam area. For steep abutments, $\gamma$ should be estimated from a DEM.
+  \item IDW interpolation (DESC → ASC): Spatial interpolation introduces estimation error where data are sparse. The chosen radius and neighbour selection mitigate this, but coherence masks and spatial distributions should be inspected.
+  \item {Sensitivity:} Radar LOS is more sensitive to vertical motion than to east–west horizontal motion. Thus, $d_V$ estimates are more robust, while $d_H$ typically exhibits larger uncertainties.
+\end{itemize}
+
+
+\renewcommand{\arraystretch}{1} % mantém espaçamento entre linhas
+\begin{table}[h!]
+    \centering
+    \caption{Summary of symbols and parameters used in the LOS decomposition.}
+    \label{tab:los_parameters}
+    \begin{tabular}{p{2.5cm}p{4.5cm}<{\raggedright}p{4.5cm}<{\raggedright}p{4.5cm}<{\raggedright}}
+        \toprule
+        \textbf{Symbol} & \textbf{Meaning} & \textbf{Source in code} & \textbf{Comment} \\ 
+        \midrule
+        $d_{ASC}$, $d_{DESC}$ & Line-of-sight (LOS) displacements from ascending and descending orbits & \texttt{disp}, \texttt{disp\_idw} columns & Original InSAR data (ASC/DESC) \\
+        \midrule
+        $\theta_A$, $\theta_D$ & Incidence angle (between LOS and vertical) & \texttt{incidence\_angle}, \texttt{theta\_desc} & Retrieved from EGMS metadata \\
+        \midrule
+        $\alpha_A$, $\alpha_D$ & Azimuth angle of the satellite orbit (track angle) & \texttt{track\_angle}, \texttt{alpha\_desc} & Also obtained from EGMS metadata \\
+        \midrule
+        $\beta$ & Orbital geometric correction term (simplified) & \texttt{np.arcsin(...)} function & Not the surface aspect, but an approximate geometric factor \\
+        \midrule
+        $\gamma$ & Cross-track surface tilt & Set to 0 & Assumes flat terrain \\
+        \midrule
+        $d_V$, $d_H$ & Vertical (U) and horizontal (E–W) displacements & Computed by trigonometric decomposition & Final results, compared with ORTHO data \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+
+This formulation ensures that displacements are correctly projected onto the vertical and horizontal reference frame, considering local terrain geometry. The decomposition was applied to each point within the dam area and aggregated into 100 m grid cells for subsequent comparison with the orthogonally derived displacements from the EGMS ORTHO products.
+
+\begin{figure}[h!]  % h! tenta colocar a figura aqui
+    \centering
+    \includegraphics[width=\textwidth]{figures/los_disp.png}  % largura total
+    \caption{Extended plots including original ASC and DESC LOS measurements.}
+    \label{fig:asc_desc_los}  % referência no texto
+\end{figure}
+
+
+\paragraph{Spatial aggregation into grid cells}
+The computed dV and dH components were aggregated into 100 m grid cells centered on the ORTHO points. This spatial aggregation ensured consistency between InSAR-derived components and independent orthogonal measurements and facilitated comparison across the dam body.
+
+\paragraph{Visualization and validation}
+Selected cells across the dam were analyzed in detail. For each cell, vertical and horizontal displacement time-series were plotted, comparing ASC/DESC LOS measurements, ASC/DESC IDW decomposed components, and ORTHO displacements.
+
+\begin{figure}[h!]  % h! tenta colocar a figura aqui
+    \centering
+    \includegraphics[width=\textwidth]{figures/valid_disp.png}  % largura total
+    \caption{Time-series plots of dV and dH from ASC/DESC IDW compared to ORTHO.}
+    \label{fig:asc_desc_valid}  % referência no texto
+\end{figure}
+
+
+\subsubsection{Validation with orthophoto-derived displacements}
+
+To evaluate the reliability of InSAR-derived displacements, both $d_V$ and $d_H$ components were compared to independent measurements obtained from orthophoto data.
+
+For each displacement direction, pairs of co-located observations were extracted, resulting in two datasets:
+\begin{itemize}
+    \item $d_V^{\text{InSAR}}$ vs. $d_V^{\text{Ortho}}$
+    \item $d_H^{\text{InSAR}}$ vs. $d_H^{\text{Ortho}}$
+\end{itemize}
+
+These datasets were analysed through scatter plots, and their correspondence was quantified using standard statistical metrics.
+
+
+\begin{figure}[h!]  % h! tenta colocar a figura aqui
+    \centering
+    \includegraphics[width=\textwidth]{figures/correl.png}  % largura total
+    \caption{Plots showing line-identity comparison and statistical validation metrics.}
+    \label{fig:asc_desc_correl}  % referência no texto
+\end{figure}
+
+
+\subsubsection{Accuracy assessment metrics}
+
+The consistency between InSAR and Ortho displacements was evaluated using RMSE, MAE, and Pearson’s $r$, measuring respectively the average error, absolute deviation, and linear correlation between datasets.
+
+\begin{itemize}[left=1em,labelsep=0.5em,itemsep=0.5em]
+    \item Root Mean Square Error (RMSE): 
+    \begin{equation}
+        \text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} \left( y_i - \hat{y}_i \right)^2 }
+    \end{equation}
+    which measures the average magnitude of the error in millimetres.
+
+    \item Mean Absolute Error (MAE): 
+    \begin{equation}
+        \text{MAE} = \frac{1}{n} \sum_{i=1}^{n} \left| y_i - \hat{y}_i \right|
+    \end{equation}
+
+    \item Pearson Correlation Coefficient ($r$):
+    \begin{equation}
+        r = \frac{\text{cov}(y_i, \hat{y}_i)}{\sigma_y \, \sigma_{\hat{y}}}
+    \end{equation}
+\end{itemize}
+
+
+
+\begin{figure}[h!]  % h! tenta colocar a figura aqui
+    \centering
+    \includegraphics[width=\textwidth]{figures/correl_2.png}  % largura total
+    \caption{....}
+    \label{fig:asc_desc_correl_2}  % referência no texto
+\end{figure}
+
+
+\subsection{Clustering and Pattern Analysis}
+
+\subsubsection{overview}
+
+Clustering techniques were applied to identify spatial and temporal patterns of deformation within the InSAR-derived displacement datasets. These unsupervised machine learning methods enable the grouping of areas with similar deformation behaviour, facilitating the identification of zones with homogeneous motion, potential structural anomalies, or early indicators of instability.
+
+In this study, both spatial clustering (using average displacement values) and temporal clustering (using time-series of deformation) were implemented. The main algorithms adopted were K-Means and Hierarchical Clustering using DTW distance.
+
+\subsubsection{K-Means Clustering}
+
+The K-Means algorithm was first employed to partition the InSAR displacement time-series into a predefined number of clusters based on their overall temporal similarity.
+This method minimizes intra-cluster variance by iteratively assigning each time-series to the nearest cluster centroid and recalculating centroids until convergence.
+The optimal number of clusters kwas determined through the Silhouette Score and the Elbow Method, ensuring a balance between cluster compactness and separation.
+K-Means provided an efficient way to identify dominant deformation behaviours—such as stable, subsiding, or uplifting areas—serving as a first-level classification of the dataset.
+
+
+\subsubsection{Hierarchical Clustering using DTW Distance}
+
+To complement the partition-based results of K-Means, Hierarchical Clustering using Dynamic Time Warping (DTW) distance was applied to further explore the nested relationships among deformation time-series. Unlike conventional Euclidean metrics, DTW accounts for time shifts and non-linear temporal variations, making it particularly suited for deformation signals influenced by seasonal or delayed processes.
+
+DTW measures the similarity between two sequences $X=(x_1, \dots, x_n)$ and $Y=(y_1, \dots, y_m)$ by finding the optimal alignment path $w$ that minimizes the cumulative distance:
+
+\begin{equation}
+\text{DTW}(X,Y) = \min_{w} \sum_{(i,j) \in w} \| x_i - y_j \|
+\end{equation}
+
+The hierarchical algorithm begins by treating each time-series as an individual cluster and successively merges them based on their DTW-based distance, according to a chosen linkage criterion (e.g., average or Ward’s method). The resulting dendrogram provides a visual representation of cluster hierarchy, revealing groups of time-series that share similar deformation dynamics. The dendrogram was cut at the level that maximized the Silhouette Score, ensuring well-separated and physically meaningful groupings.
+
+This combined DTW–Hierarchical approach offered:
+\begin{itemize}[left=1em,labelsep=0.5em,itemsep=0.5em]
+    \item A detailed visualization of relationships among deformation patterns,
+    \item The ability to detect gradual transitions between deformation regimes, and
+    \item Independent validation of the K-Means results.
+\end{itemize}
+
+Overall, the use of K-Means and DTW-based Hierarchical Clustering enabled a comprehensive understanding of deformation behaviour—from dominant regional trends to subtle local variations—supporting a more robust interpretation of the InSAR-derived displacement field.
+
+
 
 \section{Conclusion}
 Summarize key points and future work.
