@@ -1,11 +1,10 @@
 \documentclass[11pt,a4paper]{article}
+%\documentclass[10pt,a4paper,twocolumn]{article}
 
 % =======================
 % Pacotes básicos
 % =======================
 \usepackage[english]{babel}
-\usepackage{fontspec}          % XeLaTeX/LuaLaTeX
-\setmainfont{Times New Roman}  
 
 \usepackage[margin=1.8cm]{geometry}  % margens
 \usepackage{setspace}                % espaçamento de linha
@@ -22,12 +21,12 @@
 % =======================
 \usepackage{enumitem}
 \setlist[itemize]{
-    left=1em,       % pequeno recuo à esquerda
-    labelsep=0.5em, % espaço entre o bullet e o texto
-    topsep=0pt,     % remove espaço acima da lista
+    left=1em,
+    labelsep=0.5em,
+    topsep=0pt,
     partopsep=0pt, 
-    parsep=0pt,     % remove espaçamento entre parágrafos dentro da lista
-    itemsep=0pt     % remove espaçamento extra entre itens
+    parsep=0pt,
+    itemsep=0.5em
 }
 \setlist[enumerate]{
     left=1em,
@@ -35,9 +34,8 @@
     topsep=0pt,
     partopsep=0pt,
     parsep=0pt,
-    itemsep=0pt
+    itemsep=0.5em
 }
-
 
 % =======================
 % Ambientes quote sem recuo
@@ -49,19 +47,21 @@
 % =======================
 % Figuras e legendas
 % =======================
-\usepackage{graphicx}      % inserir figuras
-\usepackage{caption}       % legendas
-\usepackage{subcaption}    % subfiguras
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
 \captionsetup[subfigure]{justification=centering}
 
 % =======================
 % Tabelas
 % =======================
-\usepackage{array}         % tabelas avançadas
-\usepackage{booktabs}      % linhas horizontais bonitas
-\usepackage{multirow}      % células múltiplas
-\usepackage{ragged2e}      % alinhamento de texto em colunas
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{ragged2e}
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\RaggedLeft\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
 
 % =======================
 % Matemática
@@ -75,7 +75,7 @@
 \titlespacing*{\section}{0pt}{*2}{*1}
 \titlespacing*{\subsection}{0pt}{*2}{*1}
 \titlespacing*{\subsubsection}{0pt}{*1.5}{*0.5}
-\titlespacing*{\paragraph}{0pt}{*1}{*0}[\\]  % run-in + quebra de linha
+\titlespacing*{\paragraph}{0pt}{*1}{*0}[\\]
 \titleformat{\paragraph}[runin]{\bfseries}{\theparagraph}{1em}{}[\\]
 
 % =======================
@@ -84,29 +84,6 @@
 \usepackage{csquotes}
 \usepackage[backend=biber,style=apa,maxcitenames=2,uniquename=false]{biblatex}
 \addbibresource{ref/zotero_refs.bib}
-
-
-% =======================
-% Listas com pequeno recuo
-% =======================
-\usepackage{enumitem}
-\setlist[itemize]{
-    left=1em,       % pequeno recuo à esquerda
-    labelsep=0.5em, % espaço entre o bullet e o texto
-    topsep=0pt,     % espaço acima da lista
-    partopsep=0pt, 
-    parsep=0pt, 
-    itemsep=0.5em   % espaço entre itens da lista
-}
-\setlist[enumerate]{
-    left=1em,
-    labelsep=0.5em,
-    topsep=0pt,
-    partopsep=0pt,
-    parsep=0pt,
-    itemsep=0.5em
-}
-
 
 % =======================
 % Hiperlinks
@@ -123,13 +100,6 @@
 % Data
 % =======================
 \usepackage[english]{datetime2}
-
-% =======================
-% Comandos adicionais para alinhamento de parágrafos em tabelas
-% =======================
-\newcolumntype{R}[1]{>{\RaggedLeft\arraybackslash}p{#1}}
-\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
-
 
 
 % =======================
