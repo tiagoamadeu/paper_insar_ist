@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.4) (preloaded format=xelatex 2025.11.11)  12 NOV 2025 19:06
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.4) (preloaded format=xelatex 2025.11.11)  12 NOV 2025 23:53
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -768,7 +768,20 @@ Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
 Package csquotes Info: Adjusting default style.
 Package csquotes Info: Redefining alias 'default' -> 'english'.
- (paper_insar.aux)
+ (paper_insar.aux
+
+LaTeX Warning: Label `fig:planta1' multiply defined.
+
+
+LaTeX Warning: Label `sub@fig:planta1' multiply defined.
+
+
+LaTeX Warning: Label `fig:planta2' multiply defined.
+
+
+LaTeX Warning: Label `sub@fig:planta2' multiply defined.
+
+)
 \openout1 = `paper_insar.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 127.
@@ -968,9 +981,33 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 [9]
 
 [10]
+File: figures/selected_cells.png Graphic file (type bmp)
+<figures/selected_cells.png>
+File: figures/k_means.png Graphic file (type bmp)
+<figures/k_means.png>
+File: figures/k_means_temp.png Graphic file (type bmp)
+<figures/k_means_temp.png>
+File: figures/k_means_nivel.png Graphic file (type bmp)
+<figures/k_means_nivel.png>
+File: figures/k_means_prec.png Graphic file (type bmp)
+<figures/k_means_prec.png>
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
 
 [11]
-Overfull \hbox (4.5963pt too wide) in paragraph at lines 475--475
+File: figures/stl.png Graphic file (type bmp)
+<figures/stl.png>
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+
+[12]
+Overfull \hbox (4.5963pt too wide) in paragraph at lines 528--528
 \TU/lmr/m/n/10.95 ries. \TU/lmr/m/it/10.95 Geophysical Research Letters\TU/lmr/
 m/n/10.95 , \TU/lmr/m/it/10.95 48\TU/lmr/m/n/10.95 (3), e2020GL090970. [][]$[][
 ][][][] [] [] [] [][][] [] [][][] [] [][] [] [][][][] [] [][][][][][][][][][][]
@@ -979,24 +1016,30 @@ m/n/10.95 , \TU/lmr/m/it/10.95 48\TU/lmr/m/n/10.95 (3), e2020GL090970. [][]$[][
 
 
 
-[12] (paper_insar.aux)
+[13]
+
+[14] (paper_insar.aux)
  ***********
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-09-02>
  ***********
+
+
+LaTeX Warning: There were multiply-defined labels.
+
 Package rerunfilecheck Info: File `paper_insar.out' has not changed.
-(rerunfilecheck)             Checksum: BEE64965D5416C5FA81D876DFFB5FC37;3617.
+(rerunfilecheck)             Checksum: 7166339B7BA753CC5513A7C23C95710E;3932.
 Package logreq Info: Writing requests to 'paper_insar.run.xml'.
 \openout1 = `paper_insar.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 24773 strings out of 403197
- 450742 string characters out of 5455936
- 1434995 words of memory out of 5000000
- 53020 multiletter control sequences out of 15000+600000
+ 24825 strings out of 403197
+ 452006 string characters out of 5455936
+ 1435228 words of memory out of 5000000
+ 53067 multiletter control sequences out of 15000+600000
  634378 words of font info for 78 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  69i,12n,107p,2168b,5238s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on paper_insar.pdf (12 pages).
+Output written on paper_insar.pdf (14 pages).

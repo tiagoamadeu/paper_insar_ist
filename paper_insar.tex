@@ -442,6 +442,46 @@ This method minimizes intra-cluster variance by iteratively assigning each time-
 The optimal number of clusters kwas determined through the Silhouette Score and the Elbow Method, ensuring a balance between cluster compactness and separation.
 K-Means provided an efficient way to identify dominant deformation behaviours—such as stable, subsiding, or uplifting areas—serving as a first-level classification of the dataset.
 
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/selected_cells.png}
+        \caption{Study Area: Grid cells and InSAR observations. White points show the ortho points; colored points represent the processed ascending and descending orbit acquisitions combined.}
+        \label{fig:planta1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/k_means.png}
+        \caption{K-Means clustering results for vertical displacement (dV) time-series. Each color represents a cluster of grid cells with similar temporal deformation patterns.}
+        \label{fig:planta2}
+    \end{subfigure}
+    \caption{Overview of the study area and cluster analysis.}
+    \label{fig:k_means_tmp}
+\end{figure}
+
+\begin{figure}[h!]  % h! tenta colocar a figura aqui
+    \centering
+    \includegraphics[width=\textwidth]{figures/k_means_temp.png}  % largura total
+    \caption{Mean vertical displacement (dV) per cluster with smoothed temperature (black line).}
+    \label{fig:temp}  % referência no texto
+\end{figure}
+
+\begin{figure}[h!]  % h! tenta colocar a figura aqui
+    \centering
+    \includegraphics[width=\textwidth]{figures/k_means_nivel.png}  % largura total
+    \caption{Mean vertical displacement (dV) per cluster with reservoir water level (black line).}
+    \label{fig:nivel}  % referência no texto
+\end{figure}
+
+\begin{figure}[h!]  % h! tenta colocar a figura aqui
+    \centering
+    \includegraphics[width=\textwidth]{figures/k_means_prec.png}  % largura total
+    \caption{Mean vertical displacement (dV) per cluster with precipitation (blue bars)}
+    \label{fig:prec}  % referência no texto
+\end{figure}
+
 
 \subsubsection{Hierarchical Clustering using DTW Distance}
 
@@ -461,6 +501,19 @@ This combined DTW–Hierarchical approach offered:
     \item The ability to detect gradual transitions between deformation regimes, and
     \item Independent validation of the K-Means results.
 \end{itemize}
+
+
+\subsubsection{Temporal Decomposition of Clustered Time-Series}
+
+To further explore the temporal dynamics of the displacement signals, STL decomposition was applied to the cluster-mean series from both K-Means and DTW-Hierarchical clustering. Trend, seasonal, and residual components are presented for each cluster.
+
+\begin{figure}[h!]  % h! tenta colocar a figura aqui
+    \centering
+    \includegraphics[width=\textwidth]{figures/stl.png}  % largura total
+    \caption{STL decomposition of mean vertical displacement (dV) per cluster: trend (top), seasonal component (middle), residuals (bottom). Cluster colours correspond to K-Means results.}
+    \label{fig:k_means_stl}  % referência no texto
+\end{figure}
+
 
 Overall, the use of K-Means and DTW-based Hierarchical Clustering enabled a comprehensive understanding of deformation behaviour—from dominant regional trends to subtle local variations—supporting a more robust interpretation of the InSAR-derived displacement field.
 
