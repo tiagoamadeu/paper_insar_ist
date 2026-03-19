@@ -97,6 +97,15 @@
 }
 
 % =======================
+% Sublinhar texto
+% =======================
+\usepackage{xcolor}
+\usepackage{soul}
+\usepackage{soulutf8}
+\sethlcolor{yellow!40}
+%\sethlcolor{yellow}
+
+% =======================
 % Data
 % =======================
 \usepackage[english]{datetime2}
@@ -143,125 +152,179 @@ This review explores the application of Earth observation techniques, such as In
 
 \section{Introduction}
 
-% ---------------------------------------------------------
-% CONTEXTO E IMPORTÂNCIA (Pilar da Segurança)
-% ---------------------------------------------------------
+% -----------------------------------------------------------------------------
+% 1.1 CONTEXTO: O "Padrão de Ouro" e a sua Vulnerabilidade
 
-\subsection{Context}
-Importância das barragens e o caso do Alqueva.
+% NOTAS: Mata (2023), Hariri-Ardebili (2023), Salazar (2017), De Sortis (2007).
+% NOTA ESTRUTURAL: Importância da monitorização (Pilar da Segurança). 
+% MÉTODO: Referir métodos in-situ como "padrão de ouro" (Pêndulos, Piezómetros) para não ofender a engenharia clássica.
+% GAP DE TRANSIÇÃO: Métodos tradicionais são pontuais, caros e não holísticos.
+% -----------------------------------------------------------------------------
+\subsection{Contexto}
+Geotechnical structures, particularly large-scale concrete dams, play a critical role in global infrastructure, environmental management, and energy generation. Ensuring their structural integrity is paramount to preventing catastrophic failures. Traditionally, monitoring systems have focused on "observing the main actions and characterising the quasi-static structural response" \parencite{mataAnalysisInterpretationObserved2023}. These methods, based on physical inspections and \textit{in-situ} instrumentation, have long been the standard for ensuring stability. Since 1967, the Hydrostatic-Seasonal-Time (HST) model, first proposed by Willm and Beaujoint, has remained the most popular data-based behavior model in dam engineering \parencite{salazar2017}. However, as the scale and complexity of modern projects increase, these traditional methods have become "increasingly insufficient" \parencite{hariri-ardebili2023}. A significant challenge lies in the reliability of instruments placed in "hostile environments, where humidity, temperature change, and freeze" put any mechanical or electronic tool to the test \parencite{desortis2007}, making the case for more robust, remote-sensing-based frameworks, especially in remote areas.
 
-Geotechnical structures play a critical role in infrastructure and environmental management worldwide. Understanding the behaviour of these structures under varying environmental and operational conditions is essential for ensuring their safety, longevity, and performance. Dams, for example, are integral to water storage, flood control, and hydroelectric energy generation, with their stability being paramount to avoiding catastrophic failures. Over the years, traditional methods have been employed to monitor and assess the health of these structures, relying primarily on physical inspections and direct measurements. However, these methods often face limitations due to the complexity of geotechnical phenomena, such as ground deformation, structural movements, and other dynamic processes that are not easily captured using conventional techniques.
+\hl{\mbox{\parencite{mataAnalysisInterpretationObserved2023}} "Traditionally, monitoring systems of large concrete dams have been based on observing the main actions and characterising the quasi-static structural response.}
 
-In recent years, significant advancements have been made in Earth observation technologies, including synthetic aperture radar interferometry (InSAR), satellite imagery, and remote sensing tools. These technologies provide valuable insights into the performance of geotechnical structures, allowing for the detection of ground displacement, deformations, and changes in the surrounding environment over time. Furthermore, the application of machine learning techniques has revolutionized the analysis of large and complex datasets, enabling the detection of patterns and anomalies that may indicate potential risks or structural failures.
+\hl{\mbox{\parencite{hariri-ardebili2023}} "Traditional dam safety methods, based on visual inspections and manual monitoring, have long been the standard for ensuring the stability and safety of dams. However, as the scale and complexity of dam projects have increased, these methods have become increasingly insufficient."}
 
-This review aims to explore the current state of knowledge regarding the behaviour of geotechnical structures, with a particular focus on concrete dams. It delves into the role of Earth observation techniques and machine learning in monitoring these structures, detecting early signs of potential failure, and improving predictive modelling. By reviewing recent studies, we will examine how these technologies are transforming geotechnical monitoring and providing new opportunities for risk mitigation and safety enhancement.
+\hl{\mbox{\parencite{salazargonzalez2017}} "Linear regression is the simplest statistical technique, appropriate to reproduce certain phenomena. It is also the basis of the most popular data-based behaviour model in dam engineering: the Hydrostatic-Season-Time (HST). It was first proposed by Willm and Beaujoint  in 1967."}
 
-% ---------------------------------------------------------
-% ESTADO DA ARTE E LIMITAÇÕES (Zotero: Hariri-Ardebili, 2023)
-% NOTA: Usar as limitações para justificar o GAP de integração
-% ---------------------------------------------------------
+\hl{\mbox{\parencite{ruiz-armenteros2023}} "Periodic in-person inspections by specialized technicians are conducted to maintain the facilities, ranging from daily to annual visits.}
 
-\subsection{O Estado da Arte (As tuas tags do Zotero)}
-Aqui citas os outros autores. "Estudos recentes mostram que o InSAR funciona [Autor A], mas apresentam limitações em X [Tag: Limitations], pelo que o meu trabalho visa aprimorar essas limitações com [meu método]."
+\hl{\mbox{\parencite{desortis2007}} "Actually it is not easy to get reliable measures by means of instruments often placed in hostile environments, where humidity, temperature change, freeze and uncomfortable access put to the test any kind of mechanical and electronic tool." isto pode ser útil para justificar a framework e ser utilizada em áreas mais remotas}
 
-Estudos recentes:
-Some authors proposed a framework for monitoring geotechnical structures using InSAR and machine learning \parencite{xie2022, cernuto2026}. \cite{cernuto2026} concluded that "The separate analyses of ascending and descending geometries revealed their complementarity, suggesting that their integration represents a potential advancement toward a more comprehensive characterization of deformation phenomena." and "...the proposed method provides an operational framework for large-scale evaluation of landslide–infrastructure interaction, serving as a valuable preliminary support for risk management and the planning of more detailed investigations."
+% -----------------------------------------------------------------------------
+% 1.2 AVANÇOS INSAR: MT-InSAR (PSInSAR, SBAS)
 
-Limitações:
-\parencite{hariri-ardebili2023} "On the other hand, its limitations can be summarized as: (i) relies on satellite availability and suitable imaging conditions, which can be limited in certain regions, (ii) data processing and analysis may require expertise in remote sensing techniques, and (iii) accuracy and resolution of satellite imagery may vary depending on the sensor and orbit."
+% NOTA: Ruiz-Armenteros (2018) refere que ainda não é uma aplicação generalizada.
+% NOTA ZOTERO: Avanços InSAR e EO. 
+% CITAÇÕES: Xie et al. (2022), Cernuto et al. (2026) - Precisão milimétrica.
+% CITAÇÃO DIRETA CERNUTO: "The separate analyses of ascending and descending geometries revealed 
+% their complementarity, suggesting that their integration represents a potential advancement..."
+% TÉCNICAS: PSInSAR (estabilidade longo prazo) e SBAS (deformação localizada).
+% -----------------------------------------------------------------------------
+\subsection{Avanços Insar e EO}
 
-\parencite{hariri-ardebili2023} "Machine learning models require large amounts of high-quality data to train effectively. However, dam engineering data is often limited, incomplete, and scattered across various sources."
+Recent advancements in Multi-Temporal InSAR (MT-InSAR) have revolutionized geotechnical monitoring, offering millimetre-level precision regardless of lighting or weather conditions \parencite{xie2022, cernuto2026}. Within the InSAR family, specialized approaches such as Persistent Scatterer (PSInSAR) and Small Baseline Subset (SBAS) have gained prominence for their ability to detect subtle ground movements \parencite{hariri-ardebiliAdvancesDamEngineering2020}. However, structural monitoring of dams using MT-InSAR is not yet a widespread application \parencite{ruiz-armenteros2018}. Nevertheless, previous achievements suggest these techniques can support warning systems by adding redundancy at a low cost.
 
-Apesar dos avanços... referir a contribuição do meu trabalho:
+% -----------------------------------------------------------------------------
+% 1.3 OPORTUNIDADE: O advento do EGMS e a Sofisticação da IA
 
+% NOTA: Ruiz-Armenteros (2023) destaca o EGMS como complemento ao on-site.
+% NOTA EGMS: Oportunidade técnica pós-2022. 
+% ENQUADRAMENTO: Copernicus Land Monitoring Service, EEA e ESA.
+% GAP DE DADOS: Big Data disponível, mas pouca validação em barragens de betão (Alqueva).
+% CITAÇÃO: Maes (2025) - EGMS para mapeamento de infraestruturas.
+% -----------------------------------------------------------------------------
+\subsection{Oportunidade}
+% A significant technological opportunity emerged in 2022 with the launch of the European Ground Motion Service (EGMS), part of the Copernicus Land Monitoring Service. Funded by the European Commission and implemented by the European Environment Agency (EEA) in collaboration with the European Space Agency (ESA), the EGMS represents the first continental-scale application of InSAR. It addresses previous barriers regarding data cost and processing complexity by providing standardized, open-access displacement data derived from the Sentinel-1 constellation. While recent works have begun exploring EGMS for infrastructure mapping \parencite{maes2025}, its systematic application and validation in large-scale concrete dams remain limited.
 
+A major technological opportunity emerged in 2022 with the launch of the European Ground Motion Service (EGMS). Implemented by the EEA and ESA, it provides standardized, open-access displacement data that complements on-site monitoring by offering "broader spatial coverage and continuous monitoring capabilities" \parencite{ruiz-armenteros2023}. By examining the temporal patterns in EGMS time series, it is possible to identify long-term trends or seasonal variations critical for assessing risks. Simultaneously, Artificial Intelligence (AI) models are becoming increasingly sophisticated, opening "fresh opportunities for dam’s digital and intelligent development" \parencite{cao2025}.
 
-\subsection{A Oportunidade}
-"O surgimento do EGMS em 2022 abre uma oportunidade [Tag: Opportunity] técnica que antes não existia." Começas com a importância do Alqueva e da segurança. Dizes que os métodos in-situ são o "padrão de ouro" (importante para não ofender os engenheiros tradicionais!), mas apontas logo a limitação: são pontuais e caros. Narrativa: Introduzes o InSAR e o EGMS. Explicas que o EGMS resolveu a "complexidade e o custo" (citas o autor de 2018 aqui). O Gap: Referes que, embora os dados existam (Big Data), a sua validação em infraestruturas críticas como o Alqueva ainda é rara.
+\hl{\mbox{\parencite{ruiz-armenteros2023}} "In addition to on-site monitoring techniques, the EGMS complements these methods by offering broader spatial coverage and continuous monitoring capabilities. It assists in identifying areas of interest for further investigation and validation, allowing dam operators and authorities to allocate their resources effectively."}
 
-\parencite{hariri-ardebili2023} "AI-based analysis can help in reducing the time and cost associated with manual analysis, making it more efficient, especially for large-scale structures such as dams."
+\hl{\mbox{\parencite{ruiz-armenteros2023}} "The EGMS generates time series data that illustrate the evolution of ground motion over a specific period. By examining the temporal patterns of ground displacement, it becomes possible to identify longterm trends or seasonal variations in the dam's behavior and its surroundings. This information is valuable for understanding the dam's stability and assessing any changes that may pose a risk."}
 
-\parencite{hariri-ardebili2023} "The small surface displacements caused by the dam’s construction or by the subsurface movement of soil and rock can be measured by satellite to help identify potential stability problems."
+\hl{\mbox{\parencite{cao2025}} "After decades of research, AI in particular are becoming increasingly sophisticated. Theses open up fresh opportunities for dam’s digital and intelligent development (Sun et al., 2018; Zhang et al., 2019)."}
 
-\parencite{hariri-ardebili2023} "In summary, the strengths of remote sensing and satellite monitoring technology are: (i) provides wide-area coverage and frequent data acquisition for monitoring dam conditions, (ii) allows monitoring of parameters such as land deformation, water levels, and vegetation growth, and (iii) supports early warning systems for potential hazards and environmental changes."
+% \parencite{hariri-ardebili2023} "AI-based analysis can help in reducing the time and cost associated with manual analysis, making it more efficient, especially for large-scale structures such as dams."
 
-\parencite{hariri-ardebili2023} "Despite the potential benefits of AI, several challenges need to be addressed before it can be fully integrated into dam engineering."
+% \parencite{hariri-ardebili2023} "The small surface displacements caused by the dam’s construction or by the subsurface movement of soil and rock can be measured by satellite to help identify potential stability problems."
 
-\parencite{cernuto2026} "Interferometric Synthetic Aperture Radar (InSAR) has emerged as a particularly promising technique in this context8,9, 17 offering the ability to measure ground displacements in a non-invasive manner, regardless of lighting or weather conditions, and 18 over wide areas with millimetre-level precision"
+% \parencite{hariri-ardebili2023} "In summary, the strengths of remote sensing and satellite monitoring technology are: (i) provides wide-area coverage and frequent data acquisition for monitoring dam conditions, (ii) allows monitoring of parameters such as land deformation, water levels, and vegetation growth, and (iii) supports early warning systems for potential hazards and environmental changes."
 
-\parencite{cernuto2026} "The study provided a systematic assessment of the interferometric observability of landslides interacting with linear infras449 tructure, integrating EGMS data with the IFFI inventory to identify the conditions under which significant deformations can 450 be detected. The analysis conducted in Emilia-Romagna and Umbria confirmed that the effectiveness of radar observation is 451 strongly influenced by the geomorphological and geometric characteristics of the slopes, highlighting differences related to both 452 morphology and the orientation of the phenomena. The separate analyses of ascending and descending geometries revealed 453 their complementarity, suggesting that their integration represents a potential advancement toward a more comprehensive 454 characterization of deformation phenomena."
+% \parencite{hariri-ardebili2023} "Despite the potential benefits of AI, several challenges need to be addressed before it can be fully integrated into dam engineering."
 
-\parencite{cernuto2026} "Overall, the proposed method provides an operational framework for large-scale evaluation of 466 landslide–infrastructure interaction, serving as a valuable preliminary support for risk management and the planning of more 467 detailed investigations."
+% \parencite{cernuto2026} "Interferometric Synthetic Aperture Radar (InSAR) has emerged as a particularly promising technique in this context8,9, 17 offering the ability to measure ground displacements in a non-invasive manner, regardless of lighting or weather conditions, and 18 over wide areas with millimetre-level precision"
 
-\parencite{gaoApplicationMachineLearning2024} "This indicates that machine learning can be used across all stages of geotechnical engineering—that is, its applications can cover the full geotechnical engineering lifecycle."
+% \parencite{cernuto2026} "The study provided a systematic assessment of the interferometric observability of landslides interacting with linear infras449 tructure, integrating EGMS data with the IFFI inventory to identify the conditions under which significant deformations can 450 be detected. The analysis conducted in Emilia-Romagna and Umbria confirmed that the effectiveness of radar observation is 451 strongly influenced by the geomorphological and geometric characteristics of the slopes, highlighting differences related to both 452 morphology and the orientation of the phenomena. The separate analyses of ascending and descending geometries revealed 453 their complementarity, suggesting that their integration represents a potential advancement toward a more comprehensive 454 characterization of deformation phenomena."
 
-\parencite{foroughnia2025} "One promising approach is satellite Remote Sensing (RS) technology, which enables the observation of the Earth’s surface without the need for physical presence."
+% \parencite{cernuto2026} "Overall, the proposed method provides an operational framework for large-scale evaluation of 466 landslide–infrastructure interaction, serving as a valuable preliminary support for risk management and the planning of more 467 detailed investigations."
 
+% \parencite{gaoApplicationMachineLearning2024} "This indicates that machine learning can be used across all stages of geotechnical engineering—that is, its applications can cover the full geotechnical engineering lifecycle."
 
+% \parencite{foroughnia2025} "One promising approach is satellite Remote Sensing (RS) technology, which enables the observation of the Earth’s surface without the need for physical presence."
+
+% -----------------------------------------------------------------------------
+% 1.4 ESTUDOS PRÉVIOS E FERRAMENTAS: SARClust e SIAGUA
+
+% NOTA: Roque (2023) e o projeto SIAGUA em Espanha.
+% NOVO: ESTUDOS PRÉVIOS EM BARRAGENS (A ponte para as limitações)
+% Aqui referes quem já usou InSAR em barragens (Schlögl, etc.)
+% -----------------------------------------------------------------------------
+\subsection{Estudos prévios em barragens}
+
+Several studies have explored InSAR displacement series for dam monitoring. Projects like SIAGUA in Spain have focused on using Copernicus data as routine tools for dam surveillance \parencite{ruiz-armenteros2023}. Methodologically, new tools such as SARClust have introduced semi-automatic clustering of InSAR time series to group points with "homogeneous behavior" \parencite{roque2023}. However, many of these efforts focus on retrospective analysis rather than continuous operational safety frameworks.
+
+\hl{\mbox{\parencite{roque2023}} "In this study, a new tool for semiautomatic analysis of InSAR displacement time series is presented, called SARClust—Clustering of InSAR displacement time series. The tool forms clusters of InSAR measurement points with homogeneous behavior. This means the points in each cluster present similar displacement time series among themselves, but different from the displacement time series of the points in other clusters."}
+
+\hl{\mbox{\parencite{ruiz-armenteros2023}} "The SIAGUA project, funded by the Spanish Ministry of Science and Innovation, focuses on applying the Copernicus land monitoring program and other satellite radar sensors as routine tools for monitoring dams, large ponds, and their surroundings. EGMS is used to provide initial deformation data to dam managers, enabling surveillance of the infrastructures under their responsibility."}
+
+\hl{\mbox{\parencite{ruiz-armenteros2023}} "The SIAGUA project in Spain utilizes EGMS to monitor dams and surrounding areas, providing surveillance information to dam managers."}
+
+\hl{\mbox{\parencite{ruiz-armenteros2018}} "Structural monitoring of dams using MT-InSAR is not yet a widespread application and only a relative few number of studies have been conducted during the past 15 years for structural health monitoring of dams using SAR data12-24. However, these achievements allowed to conclude that MT-InSAR techniques have the potential to support the development of new and more effective means of monitoring and analyzing the health of dams and add redundancy, at low cost, to support and assist warning systems."}
+
+% -----------------------------------------------------------------------------
+% 1.5 LIMITAÇÕES: A Crítica ao LOS e à Rigidez da IA
+
+% NOTA: Salazar (2021) e Ruiz-Armenteros (2023) sobre o LOS confusion.
+% NOTA LIMITAÇÕES: Hariri-Ardebili (2023).
+% CITAÇÃO DIRETA 1: "relies on satellite availability and suitable imaging conditions..."
+% CITAÇÃO DIRETA 2: "Machine learning models require large amounts of high-quality data... 
+% dam engineering data is often limited, incomplete, and scattered."
+% -----------------------------------------------------------------------------
+\subsection{Limitações (referidas por outros autores)}
+
+Despite these benefits, practical integration remains challenging. Machine Learning (ML) models, though often more capable than HST of reproducing non-linear effects, typically focus on specific case studies or arch dam typologies, which represent only 5\% of dams worldwide \parencite{salazarAnomalyDetectionDam2021}. Furthermore, the technical nature of radar data presents a barrier; the "practical utility of solely LOS (Line-of-Sight) deformation is limited for users unfamiliar with InSAR," often leading to confusion among dam managers accustomed to horizontal and vertical displacement vectors \parencite{ruiz-armenteros2023}. Additionally, users must be cautious of EGMS data accuracy, as discrepancies compared to ground truth can sometimes reach 5–10 mm/yr due to atmospheric or geometric artifacts \parencite{crosetto2025}.
+
+\hl{\mbox{\parencite{salazarAnomalyDetectionDam2021}} "There is a growing interest in the application of innovative tools in dam monitoring data  analysis. Although only HST is fully implemented in engineering practice, the number of  publications on the application of other methods has increased considerably in recent years,  specially NN.  It seems clear that the models based on ML algorithms can offer more accurate estimates  of the dam behaviour than the HST method in many cases. In general, they are more suitable  to reproduce non-linear effects and complex interactions between input variables and dam  response.  However, most of the published works refer to specific case studies, certain dam typologies  or determined outputs. Many focus on radial displacements in arch dams, although this  typology represents roughly 5 of dams in operation worldwide."}
+
+\hl{\mbox{\parencite{salazarAnomalyDetectionDam2021}} "From a practical viewpoint, data-based models should also be user-friendly and easily  understood by civil engineering practitioners, typically unfamiliar with computer science,  who have the responsibility for decision making."}
+
+\hl{\mbox{\parencite{salazar2017}} "The most popular data-based approach for dam monitoring analysis is the hydrostatic-seasonal-time (HST) model. It was first proposed by Willm and Beaujoint in 1967 [9] to predict displacements in concrete dams, and has been widely used since."}
+
+\hl{While EGMS provides a continental-scale baseline, its application to specific infrastructure like dams must account for inherent InSAR limitations, such as...:}
+
+\hl{\mbox{\parencite{crosetto2025}}, "Some of the results show a good agreement between EGMS and the ground truth, both in terms of deformation velocity (absolute differences below 1–2 mm/yr) and time series (standard deviation of differences below 5 mm). However, this cannot be said generally. In some cases, the differences in the deformation velocities (EGMS vs. ground truth) are far from the millimetre-per-year precision, which is sought. For instance, differences in the range of 5–10 mm/yr can be found. The same is true for the time series, where biases up to 10–20 mm or peaks of the same order of magnitude occur."}
+
+\hl{\mbox{\parencite{ruiz-armenteros2023}} "However, utilizing InSAR technology requires specialized knowledge of various processing algorithms and significant computational resources."}
+
+% -----------------------------------------------------------------------------
+% 1.6 RESEARCH GAP: As "Ilhas Isoladas" e o Problema da Escala Ortho
+
+% NOTA: Justificar por que a união Ascendente+Descendente é a chave.
+% NOTA RESEARCH GAP: Integração InSAR + ML + Traditional Methods.
+% ANALOGIA: Atualmente, estas três áreas funcionam como "ilhas isoladas" (Silos).
+% CITAÇÃO CAO (2025): "application of these technologies in dam is still in its infancy."
+% MÉTODOS CLUSTERING: K-Means, Hierarchical, DTW.
+% GAP DE COMUNICAÇÃO: Falta de linguagem comum entre radar e engenharia civil (Autor 2018).
+% -----------------------------------------------------------------------------
 \subsection{Research Gap}
-"Apesar destas frameworks existentes [Citar as que leste], nota-se um gap na integração automática com ML para o Dam Safety." Narrativa: Dizes que a IA em barragens ainda está na "infância" (citas o review paper). Explicas o grande Gap: há quem use satélite (geodesia) e quem use IA (algoritmos), mas quase ninguém os integrou para o Dam Safety. A "Bomba": Citas o autor de 2018 sobre a "falta de linguagem comum" para justificar por que é que essa integração ainda não aconteceu.
 
-\parencite{cao2025} "Since AI make it convenient to solve many problems, including image recognition, data mining, and 3D reconstruction, it has been used to address many challenges in a variety of fields. However, the application of these technologies in dam is still in its infancy. More extensive  Fig. 14. Performance comparison of different IA algorithms on uniform datasets. research is required to make the technology solve more complex problems and gain wider application."
+A critical research gap persists where satellite remote sensing, ML, and traditional monitoring operate as "isolated islands." A technical bottleneck in the current EGMS Ortho products—which represent vertical and east-west deformation—is their 100-meter resample, which is "too large to accurately characterize local movements" in specific dams \parencite{ruiz-armenteros2023}. This necessitates a framework that can combine ascending and descending geometries to overcome the LOS limitation. Moreover, there is an urgent need for models that are "user-friendly and easily understood by civil engineering practitioners," bridging the communication gap between computer science and dam safety \parencite{salazarAnomalyDetectionDam2021}.
 
-\parencite{hariri-ardebili2023} "However, several challenges need to be addressed before AI can be fully integrated into dam engineering, including data quality and availability, algorithmic transparency, and ethical considerations."
+\hl{\mbox{\parencite{ruiz-armenteros2023}} "However, the Ortho products, which represent the vertical and east-west deformation, are not useful for this dam due to its relatively small size. A 100meter resample is too large to accurately characterize the vertical and east-west deformation patterns, as it does not capture local movements. Moreover, the Ortho products from the EGMS are not suitable for comparison with on-site measurements such as leveling over the dam's crest or berms." isto é muito importante para justificar a importância da combinação das órbitas ascendente e descendente}
 
+\hl{\mbox{\parencite{ruiz-armenteros2023}} "While the EGMS is highly beneficial for dam managers, the practical utility of solely LOS deformation is limited for users unfamiliar with InSAR, as the deformation is projected in the LOS direction. Dam managers are accustomed to working with deformations in the horizontal and vertical directions, and the deformation in the LOS direction can lead to confusion.}
 
-\subsection{A Solução (O teu contributo)}
-"Este artigo propõe a framework SAFE-DAM para resolver este gap..." Narrativa: "Para preencher este desafio em aberto, este trabalho propõe uma framework que integra dados EGMS e Clustering para converter sinais de satélite em indicadores operacionais no Alqueva."
+% \subsection{Research Gap}
+% "Apesar destas frameworks existentes [Citar as que leste], nota-se um gap na integração automática com ML para o Dam Safety." Narrativa: Dizes que a IA em barragens ainda está na "infância" (citas o review paper). Explicas o grande Gap: há quem use satélite (geodesia) e quem use IA (algoritmos), mas quase ninguém os integrou para o Dam Safety. A "Bomba": Citas o autor de 2018 sobre a "falta de linguagem comum" para justificar por que é que essa integração ainda não aconteceu.
 
+% \parencite{cao2025} "Since AI make it convenient to solve many problems, including image recognition, data mining, and 3D reconstruction, it has been used to address many challenges in a variety of fields. However, the application of these technologies in dam is still in its infancy. More extensive  Fig. 14. Performance comparison of different IA algorithms on uniform datasets. research is required to make the technology solve more complex problems and gain wider application."
 
-\section{Literature review}
+% \parencite{hariri-ardebili2023} "However, several challenges need to be addressed before AI can be fully integrated into dam engineering, including data quality and availability, algorithmic transparency, and ethical considerations."
 
+% -----------------------------------------------------------------------------
+% 1.7 SOLUÇÃO: SAFE-DAM e o caso Alqueva
 
-\subsection{Fundamentals of InSAR and Earth Observation}
+% NOTA SOLUÇÃO: Framework SAFE-DAM.
+% CONTRIBUTO: Integrar EGMS + Clustering para indicadores operacionais.
+% VALIDAÇÃO: Caso real Alqueva vs Pêndulos (Ground Truth).
 
-The integration of advanced monitoring techniques, particularly through satellite imagery and machine learning, has revolutionized the way we study and monitor geotechnical structures. These technologies allow for real-time monitoring, better prediction of failures, and more effective intervention strategies, ensuring the safety and stability of vital infrastructure.
+% "Este artigo propõe a framework SAFE-DAM para resolver este gap..." Narrativa: "Para preencher este desafio em aberto, este trabalho propõe uma framework que integra dados EGMS e Clustering para converter sinais de satélite em indicadores operacionais no Alqueva."
+% -----------------------------------------------------------------------------
+\subsection{Solução}
 
+To address this challenge, this paper proposes the SAFE-DAM (Satellite Automated Framework for Engineering of Dams). This framework integrates EGMS data with Machine Learning clustering algorithms to transform massive satellite datasets into operational safety indicators. Unlike purely theoretical studies, this work validates the SAFE-DAM methodology using a decades-long dataset from the Alqueva Dam. By cross-referencing InSAR-derived clusters with \textit{in-situ} pendulum measurements, this research demonstrates how satellite monitoring can complement traditional methods, ensuring that "engineering judgement based on experience" remains central to interpreting automated results \parencite{salazarAnomalyDetectionDam2021}.
 
-Recently, earth observation techniques, such as radar interferometry and satellite imagery, have become essential tools for monitoring geotechnical structures~\parencite{salcedo-sanzMachineLearningInformation2020,simoesSatelliteImageTime2021}. These methods enable large-scale, continuous observation, offering valuable insights into displacement, deformation, and geohazard detection. Time-series from earth observation data are particularly useful for uncovering long-term patterns of ground displacement, providing a better understanding of subsidence and deformation processes, and enabling monitoring at a regional or even global scale. Compared to traditional in-situ methods, these techniques offer unprecedented scalability and continuity.
-
-\subsection{Interferometric techniques and time-series approaches}
-
-Among the most widely used techniques, Interferometric Synthetic Aperture Radar (InSAR) has gained prominence for its ability to detect ground displacement with high precision \parencite{tomasEarthObservationsGeohazards2017}. According to \textcite{sousaGeohazardsMonitoringAssessment2021}, “Results from both the processing and analysis of a dataset of Earth observation (EO) multi-source data support the conclusion that geohazards can be identified, studied, and monitored effectively using new techniques applied to multi-source EO data.”
-
-Within the InSAR family, several specialized techniques have been developed to enhance temporal and spatial precision. Differential InSAR (DInSAR) provides highly accurate surface deformation measurements over time, making it suitable for monitoring slow-moving geotechnical phenomena \parencite{derauwOngoingAutomatedGround2020a}. The Persistent Scatterer InSAR (PSInSAR) technique is particularly effective for detecting subtle and long-term ground movements by analysing stable reflectors that maintain coherence over time \parencite{hariri-ardebiliAdvancesDamEngineering2020}. Meanwhile, the Small Baseline Subset (SBAS) approach minimizes spatial and temporal baselines between image pairs, improving temporal coherence and reducing decorrelation, making it especially suitable for localized deformation studies \parencite{parkNonlinearModelingSubsidence2021a}.
-
-More recently, these methods have been extended to advanced displacement modelling and calibration workflows \parencite{schlogl2021,tu2023}, allowing for a more robust estimation of three-dimensional ground motion and improved interpretation of geotechnical processes.
-
-\subsection{Clustering and data mining in InSAR}
-\begin{itemize}
-    \item Objetivo: identificar padrões espaciais ou temporais em deformações
-    \item Métodos:
-    \begin{itemize}
-        \item K-Means: agrupamento baseado em magnitudes médias
-        \item Hierarchical Clustering: agrupamento baseado em similaridade completa
-        \item Dynamic Time Warping (DTW): agrupamento de séries temporais não lineares
-    \end{itemize}
-    \item Comparação entre métodos, vantagens e limitações
-\end{itemize}
-
-\subsection{Applications in geotechnical monitoring}
-The application of InSAR-based techniques has expanded rapidly across various geotechnical domains. They have been successfully used for monitoring the structural integrity of dams, slopes, tunnels, and embankments, as well as for detecting subsidence in urban areas and mining regions.
-
-Several studies demonstrate the effectiveness of these techniques for geotechnical monitoring: \textcite{schlogl2021} applied InSAR time-series to evaluate dam settlements; \textcite{roque2023} integrated InSAR and geomechanical modelling for slope stability assessment; and \textcite{maes2025} explored the use of EGMS data for infrastructure deformation mapping. More recent works, such as \textcite{giordano2025}, highlight the growing potential of multi-source Earth observation data and machine learning integration for predictive geohazard analysis.
-
-\section{Case study overview}
-
-The case study focuses on the assessment of surface displacements obtained from the European Ground Motion Service (EGMS) and their validation against orthophoto-derived measurements. The study area corresponds to a monitored geotechnical structure — the Alqueva Dam, a double-curvature concrete arch dam located in the Alentejo region, southern Portugal. It is one of the largest dams in Western Europe, standing approximately 96 meters high with a crest length of 458 meters, forming a key element of Portugal’s hydro-agricultural system. The foundation consists of green schists on the right bank and phyllites on the left bank.
-
+% ----------------------------------------------------------------------------
+% ----------------------------------------------------------------------------
 
 \section{Methodology}
 
-\parencite{cernuto2026} "To quantify the interferometric coverage of landslide phenomena, each landslide polygon was divided into a regular grid of square cells, each measuring 25 metres per side. This grid size was chosen as a compromise between two contrasting needs: on one hand, a grid that is too large may lead to an overly generalised representation, where a few interferometric points cover extensive portions of the landslide, resulting in a loss of spatial detail; on the other hand, an excessively fine grid increases the likelihood of cells containing no data, due to the limited density of PSs in the EGMS datasets. The analysis was carried out separately for each orbital geometry (ascending and descending)."
+\hl{\mbox{\parencite{cernuto2026}} "To quantify the interferometric coverage of landslide phenomena, each landslide polygon was divided into a regular grid of square cells, each measuring 25 metres per side. This grid size was chosen as a compromise between two contrasting needs: on one hand, a grid that is too large may lead to an overly generalised representation, where a few interferometric points cover extensive portions of the landslide, resulting in a loss of spatial detail; on the other hand, an excessively fine grid increases the likelihood of cells containing no data, due to the limited density of PSs in the EGMS datasets. The analysis was carried out separately for each orbital geometry (ascending and descending)."}
 
-\parencite{cernuto2026} "each landslide polygon was discretised using square cells of 25×25 m. Each cell was assigned a representative 206 value corresponding to the median of the LOS velocities of the PSs contained within it (Figs. 5a, b). The use of the median 207 provides a robust estimate of the local central tendency, reducing the influence of outliers or typical InSAR-related disturbances, 208 such as atmospheric noise, anomalous reflections, or phase discontinuities. Once median velocity values were assigned to 209 each cell, it became possible to describe the internal deformation pattern of each landslide polygon through a histogram of the 210 cell-based median velocities, providing an empirical representation of the spatial variability of the phenomenon."
+\hl{\mbox{\parencite{cernuto2026}} "each landslide polygon was discretised using square cells of 25×25 m. Each cell was assigned a representative 206 value corresponding to the median of the LOS velocities of the PSs contained within it (Figs. 5a, b). The use of the median 207 provides a robust estimate of the local central tendency, reducing the influence of outliers or typical InSAR-related disturbances, 208 such as atmospheric noise, anomalous reflections, or phase discontinuities. Once median velocity values were assigned to 209 each cell, it became possible to describe the internal deformation pattern of each landslide polygon through a histogram of the 210 cell-based median velocities, providing an empirical representation of the spatial variability of the phenomenon."}
 
-\parencite{cernuto2026} "Processing ascending and descending geometries separately proved essential 417 to highlight the influence of viewing direction and the complementarity between datasets: phenomena poorly visible in one 418 geometry were often detectable in the other, confirming that integrating both perspectives reduces shadow zones and provides a 419 more complete picture of interferometric observability."
+\hl{\mbox{\parencite{cernuto2026}} "Processing ascending and descending geometries separately proved essential 417 to highlight the influence of viewing direction and the complementarity between datasets: phenomena poorly visible in one 418 geometry were often detectable in the other, confirming that integrating both perspectives reduces shadow zones and provides a 419 more complete picture of interferometric observability."}
 
-\parencite{foroughnia2025} "A well-established method that provides building-level information is Multi-Temporal Interferometric SAR (MT-InSAR), which uses stacks of SAR images. Thanks to the all-weather image acquisition capability of SAR sensors and their ability to cover large areas with short revisit times (Macchiarulo et al., 2024), MT-InSAR can monitor extensive regions affected by earthquakes using frequent SAR data. Additionally, high-resolution SAR data can be freely available through open data programs (ESA, 2024), making it well suited to accurate building-level assessments (Macchiarulo et al., 2024). The MT-InSAR technique identifies stable points, known as Persistent Scatterers (PSs), by analysing stacks of SAR images taken over time from the same area. These PSs typically correspond to man-made objects such as buildings, enabling detailed monitoring of changes at the building level. MTInSAR has been widely used for long-term displacement monitoring in urban areas (Ciampalini et al., 2014; Bianchini et al., 2015; Foroughnia et al., 2019). However, no study has yet explored this technique to assess post-earthquake building reconstruction, nor has it been utilised to support field investigations."
+\hl{\mbox{\parencite{foroughnia2025}} "A well-established method that provides building-level information is Multi-Temporal Interferometric SAR (MT-InSAR), which uses stacks of SAR images. Thanks to the all-weather image acquisition capability of SAR sensors and their ability to cover large areas with short revisit times (Macchiarulo et al., 2024), MT-InSAR can monitor extensive regions affected by earthquakes using frequent SAR data. Additionally, high-resolution SAR data can be freely available through open data programs (ESA, 2024), making it well suited to accurate building-level assessments (Macchiarulo et al., 2024). The MT-InSAR technique identifies stable points, known as Persistent Scatterers (PSs), by analysing stacks of SAR images taken over time from the same area. These PSs typically correspond to man-made objects such as buildings, enabling detailed monitoring of changes at the building level. MTInSAR has been widely used for long-term displacement monitoring in urban areas (Ciampalini et al., 2014; Bianchini et al., 2015; Foroughnia et al., 2019). However, no study has yet explored this technique to assess post-earthquake building reconstruction, nor has it been utilised to support field investigations."}
 
 \subsection{Displacements calculation and validation}
 
+\hl{\mbox{\parencite{ruiz-armenteros2023}} "However, the Ortho products, which represent the vertical and east-west deformation, are not useful for this dam due to its relatively small size. A 100meter resample is too large to accurately characterize the vertical and east-west deformation patterns, as it does not capture local movements. Moreover, the Ortho products from the EGMS are not suitable for comparison with on-site measurements such as leveling over the dam's crest or berms." isto é muito importante para justificar a importância da combinação das órbitas ascendente e descendente}
+
+\hl{\mbox{\parencite{ruiz-armenteros2023}} "While the EGMS is highly beneficial for dam managers, the practical utility of solely LOS deformation is limited for users unfamiliar with InSAR, as the deformation is projected in the LOS direction. Dam managers are accustomed to working with deformations in the horizontal and vertical directions, and the deformation in the LOS direction can lead to confusion.}
 
 The EGMS data used in this study include both ascending and descending Line-of-Sight (LOS) products, which represent ground displacements along the radar viewing direction. These LOS measurements were decomposed into vertical (Up–Down) and horizontal (East–West) components, enabling direct comparison with reference displacements derived from orthophotogrammetry (hereafter referred to as “Ortho”).
 
@@ -352,6 +415,8 @@ Two auxiliary geometric parameters are defined for each interpolated ascending (
 In this study, those DEM corrections were not used.
 
 \paragraph{Decomposition of Line-of-Sight (LOS) displacements into vertical and horizontal components}
+
+\hl{\mbox{\parencite{ruiz-armenteros2023}} "In this project, we estimate the vertical and east-west displacements by using Detektia's decomposition software, which is based on the nearest neighbors’ decomposition. Taking the positions of one of the geometries as a reference, each point is paired with the nearest point in the other geometry. The only compliance that they have to fulfill is that the paired points are not separated more than a certain predefined distance threshold."}
 
 Let $d_{\text{ASC}}$ and $d_{\text{DESC}}$ be the LOS displacements from ascending and descending passes, respectively.  
 Let $\theta_A$, $\theta_D$ be the local incidence angles (angle between LOS and vertical) for ASC and DESC, and $\alpha_A$, $\alpha_D$ their respective orbit azimuth (track) angles.
