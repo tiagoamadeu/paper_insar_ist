@@ -187,6 +187,8 @@ Unlike traditional sensors that must be physically attached to the dam, MT-InSAR
 
 \hl{\mbox{\parencite{desortis2007}} "Actually it is not easy to get reliable measures by means of instruments often placed in hostile environments, where humidity, temperature change, freeze and uncomfortable access put to the test any kind of mechanical and electronic tool." isto pode ser útil para justificar a framework e ser utilizada em áreas mais remotas}
 
+\hl{\mbox{\parencite{ziemer2025}} "The deformation behavior of dams is essentially dependent on exogenous factors, such as the air temperature and water level (i.e., water pressure) of the reservoir, as well as longterm trend components (i.e., time or the static of the structure) [1]. The monitoring program of dams often comprises a variety of procedures to guarantee their safe operation. These procedures, among others, are based on the expected deformation behavior of the dam and include pendulum systems and trigonometric measurements [2]. To test the reliability of the measurements, predictions are made regarding the expected deformation. For pendulum data, this is usually performed on a daily or weekly basis, while trigonometric field campaigns are only conducted a few times a year. Current methods utilize multiple linear regression (MLR) models to predict the expected deformation of a dam based on the aforementioned variables [1,3–5]. However, these methods may encounter challenges in adequately predicting the deformation since they rely only on a linear combination of temperature and water level daily means. Furthermore, deformation data collected through pendulum systems or trigonometry represent only a specific point on the dam or are measured infrequently due to time-consuming field campaigns, which limits their availability in space or time [6–9]."}
+
 % -----------------------------------------------------------------------------
 % 1.2 AVANÇOS INSAR: MT-InSAR (PSInSAR, SBAS)
 
@@ -225,6 +227,10 @@ The EGMS provides standardized, open-access displacement data derived from the S
 
 \hl{\mbox{\parencite{cao2025}} "After decades of research, AI in particular are becoming increasingly sophisticated. Theses open up fresh opportunities for dam’s digital and intelligent development (Sun et al., 2018; Zhang et al., 2019)."}
 
+\hl{\mbox{\parencite{ziemer2025}} "we demonstrated considerable improvements in predicting dam deformations and evaluating their drivers"}
+
+\hl{\mbox{\parencite{ziemer2025}} "By utilizing satellite-based methods such as Persistent Scatterer Interferometry (PSI), dam deformations can be monitored with millimeter precision in extensive spatial and temporal coverage. Freely available multi-temporal synthetic aperture radar interferometry (MT-InSAR) data provided by ESA’s Copernicus Sentinel-1 (S-1) mission constitute a considerable advancement. The implementation of S-1 PS time series into nationwide ground motion services, such as the German Ground Motion Service (Bodenbewegungsdienst Deutschland, BBD), opens up new possibilities for deformation monitoring on a large scale."}
+
 % \parencite{hariri-ardebili2023} "AI-based analysis can help in reducing the time and cost associated with manual analysis, making it more efficient, especially for large-scale structures such as dams."
 
 % \parencite{hariri-ardebili2023} "The small surface displacements caused by the dam’s construction or by the subsurface movement of soil and rock can be measured by satellite to help identify potential stability problems."
@@ -251,6 +257,8 @@ The EGMS provides standardized, open-access displacement data derived from the S
 % Aqui referes quem já usou InSAR em barragens (Schlögl, etc.)
 % -----------------------------------------------------------------------------
 \subsection{Estudos prévios em barragens}
+
+\hl{\mbox{\parencite{ziemer2025}} "To date, only a few studies have concentrated on predicting dam deformations [9,22], underscoring the need for further research in this field.}
 
 Several studies have explored InSAR displacement series for dam monitoring. Projects like SIAGUA in Spain have focused on using Copernicus data as routine tools for dam safety assessment \parencite{ruiz-armenteros2023}. SARClust tool have introduced semi-automatic clustering of InSAR time series to group points with "homogeneous behavior" \parencite{roque2023}. However, many of these efforts focus on retrospective analysis rather than continuous operational safety frameworks.
 
@@ -345,13 +353,95 @@ To address this challenge, this paper proposes the SAFE-DAM (Satellite Automated
 % ----------------------------------------------------------------------------
 % ----------------------------------------------------------------------------
 
+\section{Methodology (new)}
+
+This study focuses on the Alqueva Dam, a large concrete arch-gravity dam structure. An aerial perspective of the dam and its surrounding reservoir is presented in Figure 1, providing context for the structural geometry and the areas analyzed in this work.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/planta.png}
+        \label{fig:planta1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/planta2.jpg}
+        \label{fig:planta2}
+    \end{subfigure}
+    \caption{Views of the Alqueva Dam from different perspectives.}
+    \label{fig:planta_combined}
+\end{figure}
+
+\subsection{Displacements calculation and validation}
+
+The methodology utilizes calibrated ascending (ASC) and descending (DESC) InSAR datasets from the European Ground Motion Service (EGMS) Level-2b product, representing ground displacements along the satellite Line-of-Sight (LOS). To deliver a physically meaningful reference frame for structural health monitoring (SHM), these LOS measurements were decomposed into vertical ($d_V$) and horizontal east--west ($d_H$) components. 
+
+Rather than relying on single point-to-point pairing, which is highly sensitive to local phase noise, a robust \textit{Spatial Binning} approach was implemented. The study area was discretized into a regular grid with a spatial resolution of 50~m $\times$ 50~m, optimized via a multi-parameter grid search. This resolution successfully balances the spatial density of Persistent Scatterers (PS) over the dam body and adjacent slopes while preserving the localized geodynamic signal required to monitor both concrete structures and geotechnical embankments.
+
+\subsection{Decomposition of Line-of-Sight displacements}
+
+The data processing workflow, encompassing spatial filtering, grid aggregation, temporal synchronization, and geometric decomposition, was fully developed in Python utilizing high-performance geospatial and scientific libraries.
+
+\paragraph{Spatial filtering and Grid Aggregation}
+The initial spatial distribution of the EGMS calibrated points for both geometries was filtered to the dam and its surroundings, defined by fixed coordinate limits in the ETRS89-LAEA (EPSG:3035) projection ($1755050 \le \text{Northing} \le 1955850$; $2692250 \le \text{Easting} \le 2803250$). 
+
+To mitigate spatial non-overlap between ascending and descending passes, all active PS points falling within each 50~m grid cell were aggregated monthly by calculating their arithmetic mean. Consequently, the representative coordinate of each grid cell represents the geometric center of gravity of its constituent scatterers, rather than a single operational radar target.
+
+\paragraph{Temporal synchronization}
+Since ascending and descending passes are acquired on distinct orbits and calendar dates, a standardized monthly time-series vector was established. Linear interpolation was applied to synchronize both geometries to the same temporal epochs, ensuring that the subsequent algebraic decomposition represents simultaneous structural states.
+
+\paragraph{Trigonometric Decomposition via Cramer's Rule}
+Let $d_{\text{ASC}}$ and $d_{\text{DESC}}$ be the temporally synchronized and spatially aggregated LOS displacements for a given grid cell. Let $\theta_A, \theta_D$ represent the mean local incidence angles, and $\alpha_A, \alpha_D$ the respective satellite track azimuth angles retrieved from the EGMS metadata. 
+
+The projection of the true vertical ($d_V$) and horizontal east--west ($d_H$) displacements onto the radar lines-of-sight is governed by the following unit directional vectors:
+\begin{align}
+    u_{E,A} &= \sin\theta_A \sin(\alpha_A - 90^{\circ}) \\
+    u_{Up,A} &= \cos\theta_A \\
+    u_{E,D} &= \sin\theta_D \sin(\alpha_D - 90^{\circ}) \\
+    u_{Up,D} &= \cos\theta_D
+\end{align}
+
+This couples the observed LOS displacements into a deterministic $2\times2$ linear system:
+\begin{equation}
+\begin{cases}
+    d_{\text{ASC}} = u_{E,A} \cdot d_H + u_{Up,A} \cdot d_V \\
+    d_{\text{DESC}} = u_{E,D} \cdot d_H + u_{Up,D} \cdot d_V
+\end{cases}
+\end{equation}
+
+By applying Cramer's Rule, the system matrix determinant ($\det = u_{E,A} \cdot u_{Up,D} - u_{E,D} \cdot u_{Up,A}$) is evaluated. For cell geometries where $|\det| > 10^{-6}$, the explicit decomposition yields the isolated kinematic components:
+\begin{equation}
+    d_H = \frac{d_{\text{ASC}} \cdot u_{Up,D} - d_{\text{DESC}} \cdot u_{Up,A}}{\det}
+\end{equation}
+\begin{equation}
+    d_V = \frac{d_{\text{DESC}} \cdot u_{E,A} - d_{\text{ASC}} \cdot u_{E,D}}{\det}
+\end{equation}
+
+To eliminate reference-frame biases, the resulting time-series for each individual cell were normalized by subtracting the displacement value of the initial acquisition epoch ($t_0$), establishing a zero-baseline at the start of the monitoring period.
+
+\subsection{Environmental Synergy and Parameter Optimization (Grid Search)}
+
+To automatically determine the optimal combination of spatial resolution, temporal alignment, and clustering parameters, a comprehensive Grid Search (Sweep) framework was deployed. Candidate configurations were evaluated not only against geometric consistency but face their physical adherence to environmental forcing factors. 
+
+For each tested scenario, the decomposed $d_V$ time-series were clustered using Dynamic Time Warping (DTW) distance matrices and hierarchical agglomerative clustering. The resulting structural trends were cross-examined against a multi-variable environmental dataset extracted from the Copernicus ERA5-Land reanalysis model (spatial resolution $\sim$9~km) combined with local structural water level records. 
+
+A physical coupling score ($Score_C$) was computed for the clusters based on the mean absolute Pearson correlation coefficient ($r$) across six key environmental drivers acting on the concrete wall and the reservoir slopes:
+\begin{equation}
+    Score_C = \frac{|r_{\text{Temp}}| + |r_{\text{Niv}}| + |r_{\text{Prec}}| + |r_{\text{P\_An}}| + |r_{\text{Hum\_S}}| + |r_{\text{Evap}}|}{6}
+\end{equation}
+
+where the evaluated forcing variables comprise: (1) Temperature ($Temp$), (2) Hydrostatic Water Level ($Niv$), (3) Monthly Precipitation ($Prec$), (4) Hydrological Year Accumulated Precipitation ($P\_An$), (5) Soil Moisture ($Hum\_S$), and (6) Evapotranspiração ($Evap$). This physical optimization step ensures that the selected model architecture prioritizes coherent geodynamic responses over mathematical noise.
+
+
 \section{Methodology}
 
 % Mostrar que insar é fiável.
 
 % \hl{\mbox{\parencite{foroughnia2025}} "A well-established method that provides building-level information is Multi-Temporal Interferometric SAR (MT-InSAR), which uses stacks of SAR images. Thanks to the all-weather image acquisition capability of SAR sensors and their ability to cover large areas with short revisit times (Macchiarulo et al., 2024), MT-InSAR can monitor extensive regions affected by earthquakes using frequent SAR data. Additionally, high-resolution SAR data can be freely available through open data programs (ESA, 2024), making it well suited to accurate building-level assessments (Macchiarulo et al., 2024). The MT-InSAR technique identifies stable points, known as Persistent Scatterers (PSs), by analysing stacks of SAR images taken over time from the same area. These PSs typically correspond to man-made objects such as buildings, enabling detailed monitoring of changes at the building level. MTInSAR has been widely used for long-term displacement monitoring in urban areas (Ciampalini et al., 2014; Bianchini et al., 2015; Foroughnia et al., 2019). However, no study has yet explored this technique to assess post-earthquake building reconstruction, nor has it been utilised to support field investigations."}
 
-This study focuses on the Alqueva Dam, a large concrete dam structure. An aerial perspective of the dam and its surrounding reservoir is presented in Figure 1, providing context for the structural geometry and the areas analyzed in this work.
+This study focuses on the Alqueva Dam, a large concrete dam structure. An aerial perspective of the dam and its surroundings reservoir is presented in Figure 1, providing context for the structural geometry and the areas analyzed in this work.
 
 \begin{figure}[h!]
     \centering
@@ -520,7 +610,7 @@ To evaluate the local performance of the spatial resampling and decomposition pr
 \begin{figure}[h!]  % h! tenta colocar a figura aqui
     \centering
     \includegraphics[width=0.7\textwidth]{figures/random_cells.pdf}  % largura total
-    \caption{Spatial distribution of the selected grid cells used for local validation.}
+    \caption{Spatial distribution of the random selected grid cells used for local validation.}
     \label{fig:cells}  % referência no texto
 \end{figure}
 
@@ -573,19 +663,21 @@ The consistency between InSAR and Ortho displacements was evaluated using some s
 \begin{figure}[h!]  % h! tenta colocar a figura aqui
     \centering
     \includegraphics[width=\textwidth]{figures/random_global.pdf}  % largura total
-    \caption{Global-scale validation based on the ensemble average of all cells. This figure correlates the mean structural trend of the dam from InSAR with the mean ORTHO reference, illustrating the overall accuracy of the decomposition method.}
+    \caption{Global-scale validation based on the ensemble average of all cells. This figure correlates the mean structural trend of the dam from InSAR with the mean ORTHO reference.}
     \label{fig:asc_desc_correl_2}  % referência no texto
 \end{figure}
 
 The global-scale validation (Figure~\ref{fig:asc_desc_correl_2}) demonstrates a high degree of agreement between the decomposed InSAR components and the ORTHO reference dataset. For the vertical displacement ($d_V$), the analysis yielded a Pearson correlation of $r = 0.86$, with an RMSE of 1.04~mm and an MAE of 0.75~mm. The horizontal component ($d_H$) showed even higher consistency, achieving a correlation of $r = 0.95$, despite a slightly higher RMSE of 1.36~mm and MAE of 0.94~mm. These sub-millimetric average errors (MAE $<$ 1~mm) confirm that the proposed decomposition workflow and the 100~m spatial aggregation effectively minimize local phase noise while preserving the dam's fundamental geodynamic signal. The higher correlation in $d_H$ suggests that the decomposition is particularly robust in capturing the East-West seasonal fluctuations.
 
+Although the methodology was rigorously validated for both vertical and horizontal components to ensure the reliability of the decomposition, the subsequent pattern analysis and environmental modeling focus exclusively on vertical displacements ($d_V$). This choice is motivated by the primary interest in structural settlement and the vertical geodynamic response of the dam's foundation and abutments.
+
 The high statistical consistency observed at the 100~m scale provides the necessary reliability to apply this decomposition workflow to higher-resolution grids.
 
 \subsection{Clustering and Pattern Analysis}
 
-\subsubsection{overview}
+\subsubsection{Overview}
 
-Clustering techniques were applied to identify spatial and temporal patterns of deformation within the InSAR-derived displacement datasets. These unsupervised machine learning methods enable the grouping of areas with similar deformation behaviour, facilitating the identification of zones with homogeneous displacements, potential structural anomalies, or early indicators of instability.
+Clustering techniques were applied to identify spatial and temporal patterns of deformation, focusing specifically on the vertical displacement ($d_V$). These unsupervised machine learning methods enable the grouping of areas with similar deformation behaviour, facilitating the identification of zones with homogeneous displacements, potential structural anomalies, or early indicators of instability.
 
 A grid size of 50~m was implemented as it offers a higher spatial resolution than the standard 100~m EGMS ORTHO grid, allowing for more detailed mapping while maintaining a sufficient number of PS points per cell. This choice follows the rationale that a 100~m resample may be too coarse to accurately characterize local deformation patterns in specific dam structures \parencite{ruiz-armenteros2023}. Furthermore, as noted by \textcite{cernuto2026}, a grid size in the range of 25--50~m serves as a vital compromise: it prevents an overly generalized representation that loses spatial detail while avoiding an excessively fine grid where cells might contain no data due to InSAR point density.
 
@@ -600,45 +692,44 @@ A grid size of 50~m was implemented as it offers a higher spatial resolution tha
 
 \subsubsection{Hierarchical Clustering using DTW Distance}
 
-The algorithm adopted was Hierarchical Clustering using Dynamic Time Warping (DTW) distance. The hierarchical algorithm begins by treating each time-series as an individual cluster and successively merges them based on their DTW-based distance, according to a chosen linkage criterion. Unlike conventional Euclidean metrics, DTW accounts for time shifts and non-linear temporal variations, making it particularly suited for deformation signals influenced by seasonal or delayed processes. DTW measures the similarity between two sequences $X=(x_1, \dots, x_n)$ and $Y=(y_1, \dots, y_m)$ by finding the optimal alignment path $w$ that minimizes the cumulative distance:\begin{equation}\text{DTW}(X,Y) = \min_{w} \sum_{(i,j) \in w} | x_i - y_j |\label{eq:dtw}\end{equation}To control the 'elasticity' of the algorithm, a Warping Window (Sakoe-Chiba band) was implemented. This constraint limits the maximum allowable time shift between similar patterns in different time-series. A window of 0\% corresponds to the standard Euclidean distance (point-to-point comparison), while higher percentages allow the algorithm to match shapes that are slightly shifted in time.
+The algorithm adopted was Hierarchical Clustering using Dynamic Time Warping (DTW) distance. The hierarchical algorithm begins by treating each time-series as an individual cluster and successively merges them based on their DTW-based distance, according to a chosen linkage criterion. Unlike conventional Euclidean metrics, DTW accounts for time shifts and non-linear temporal variations, making it particularly suited for deformation signals influenced by seasonal or delayed processes. DTW measures the similarity between two sequences $X=(x_1, \dots, x_n)$ and $Y=(y_1, \dots, y_m)$ by finding the optimal alignment path $w$ that minimizes the cumulative distance:\begin{equation}\text{DTW}(X,Y) = \min_{w} \sum_{(i,j) \in w} | x_i - y_j |\label{eq:dtw}\end{equation} 
 
-In this study, the warping window was tested between 0\% and 10\% of the time-series length. A window of 1\% was found to be the optimal threshold to account for seasonal lags due to thermal or hydraulic factors without forcing unrealistic alignments between distinct behaviors. The linkage method chosen was \textit{Average}. The resulting dendrogram was cut manually to define 3 clusters, ensuring well-separated and physically meaningful groupings that reflect the dam's structural zones and the surroundings.
+To control the elasticity of the alignment, a warping window constraint was implemented. A window of 0\% corresponds to the standard Euclidean distance (point-to-point comparison), while higher percentages allow the algorithm to match shapes that are slightly shifted in time. In this study, the warping window was tested between 0\% and 10\% of the time-series length. A 1\% threshold was selected as the optimal balance to accommodate minor seasonal phase shiftswithout forcing alignments that would compromise the physical meaning of the clusters.
 
-To ensure the reliability of the spatial-temporal grouping, a series of sensitivity tests was performed on the core processing parameters. The outcomes of this analysis, along with the finalized settings for grid resolution, interpolation, and clustering constraints, are summarized in Table~\ref{tab:model_selection}.
+The linkage method chosen was \textit{Average}. To define the optimal number of groups, the hierarchical structure of the displacement time-series was visualized through a dendrogram (Figure~\ref{fig:dendograma}). This diagram illustrates the successive merging process based on DTW distances, where the vertical axis represents the degree of dissimilarity between groups. A manual cut-off was applied to the dendrogram to define three distinct clusters. The sensitivity analysis outcomes and the finalized processing parameters for the entire workflow are summarized in Table~\ref{tab:model_selection}.
 
 \begin{table}[htbp]
 \centering
 \caption{Summary of Sensitivity Analysis and Final Parameter Selection.}
 \label{tab:model_selection}
-\small % Reduz ligeiramente o tamanho da fonte para ajudar no ajuste
-\begin{tabularx}{\textwidth}{@{}l l l X@{}} % X faz a última coluna ocupar o espaço restante
+\footnotesize 
+\renewcommand{\arraystretch}{1.2} % Aumenta o espaço vertical entre as linhas
+\begin{tabularx}{\textwidth}{@{}l p{2.2cm} l X@{}} 
 \toprule
 Parameter & Tested Values & Final Choice & Selection Criterion \\ \midrule
 Grid Size & 20, 50, 100 m & 50 m & Spatial detail vs. PS density \\
-Temporal Interpolation & - & Linear (Monthly) & Alignment of Ascending and Descending orbits to a shared calendar \\
+Temporal Interpolation & - & Linear & Alignment of Ascending and Descending orbits to a shared date \\
 Spatial Interpolation & IDW, Kriging & IDW & Local influence of PS displacement values \\
-IDW Radius (r) & 10, 15, 30 m & 25 m & Local stationarity of InSAR points \\
-IDW Neighbors (k) & 3, 5, 8 & 5 & Preservation of local gradient \\
-IDW Power (p) & 1, 2, 3 & 2 & Standard inverse-square distance weighting \\
-Reference Geometry & Ascending, Descending & Ascending & Consistency across multi-platform datasets \\
+IDW Radius ($r$) & 10, 15, 30 m & 25 m & Local stationarity of InSAR points \\
+IDW Neighbors ($k$) & 3, 5, 8 & 5 & Preservation of local gradient \\
+IDW Power ($p$) & 1, 2, 3 & 2 & Standard inverse-square distance weighting \\
+Reference Geometry & Asc., Desc. & Ascending & Consistency across multi-platform datasets \\
 Coherence Threshold & 0.6, 0.7, 0.8 & 0.7 & Filtering of low-reliability PS points \\
-Linkage Method & Ward, Complete, Average & Average & Physical separation of deformation regimes \\
+Linkage Method & Ward, Comp., Avg. & Average & Physical separation of deformation regimes \\
 DTW Window & 0\% -- 10\% & 1\% & Thermal/hydraulic lag compensation \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-The hierarchical structure of the displacement time-series is visualized through the dendrogram in Figure~\ref{fig:dendograma}. This diagram illustrates the merging process based on DTW distances, where the vertical axis represents the degree of dissimilarity between groups. A manual cut-off was applied to define three distinct clusters, striking a balance between statistical significance and physical interpretability.
-
 
 \begin{figure}[h!]  % h! tenta colocar a figura aqui
     \centering
     \includegraphics[width=\textwidth]{figures/dendrograma_final.pdf}  % largura total
-    \caption{Dendrogram of the hierarchical clustering using DTW distance. The vertical axis represents the merging distance (dissimilarity). The dashed horizontal line indicates the automatic cut-off point determined by the Elbow method, resulting in the identification of $K$ distinct clusters based on their deformation signatures}
+    \caption{Dendrogram of the hierarchical clustering using DTW distance. The vertical axis represents the merging distance (dissimilarity). The dashed horizontal line indicates the cut-off point to generate 3 clusters.}
     \label{fig:dendograma}  % referência no texto
 \end{figure}
 
-The spatial distribution of the resulting clusters is mapped in Figure~\ref{fig:mapa}. The spatial partitioning clearly distinguishes between the engineering structure and the surrounding natural terrain, suggesting that the algorithm successfully captured the differing mechanical responses of the site.
+The spatial distribution of the resulting clusters is mapped in Figure~\ref{fig:mapa}. The spatial partitioning distinguishes between the structure and the surrounding natural terrain, suggesting that the algorithm successfully captured the differing mechanical responses of the site.
 
 \begin{figure}[h!]  % h! tenta colocar a figura aqui
     \centering
@@ -647,7 +738,7 @@ The spatial distribution of the resulting clusters is mapped in Figure~\ref{fig:
     \label{fig:mapa}  % referência no texto
 \end{figure}
 
-The temporal behavior of each cluster, integrated with environmental forcing factors, is presented in Figure~\ref{fig:clusters}. By superimposing the mean cluster signature (solid line) onto the individual cell profiles (grey lines), it is possible to assess the intra-cluster consistency and visually correlate displacement fluctuations with seasonal changes in temperature and reservoir levels.
+The temporal behavior of each cluster, integrated with environmental variables, is presented in Figure~\ref{fig:clusters}. By superimposing the mean cluster signature (solid line) onto the individual cell profiles (grey lines), it is possible to assess the intra-cluster consistency and visually correlate displacement fluctuations with seasonal changes in temperature, reservoir levels, and precipitation.
 
 \begin{figure}[h!]  % h! tenta colocar a figura aqui
     \centering
@@ -667,12 +758,9 @@ To further explore the temporal dynamics of the displacements, the Seasonal-Tren
 
 where $Y_t$ represents the observed InSAR displacement at time $t$, $T_t$ is the trend component, $S_t$ is the seasonal component, and $R_t$ are the residual components. 
 
-In the context of dam monitoring, this separation is crucial. The Seasonal component ($S_t$) captures the cyclical elastic response of the structure and surrounding terrain to annual environmental drivers, such as temperature fluctuations and periodic reservoir loading. The Trend component ($T_t$) isolates long-term geodynamic behavior, revealing potential structural settlements or stabilization patterns that are often masked by high-amplitude seasonal oscillations. Finally, residuals ($R_t$) provide a measure of the signal-to-noise ratio, where low residual values indicate a high degree of fit for the decomposition model.
+In the context of dam monitoring, this separation is crucial. The Seasonal component ($S_t$) captures the cyclical elastic response of the structure and surrounding terrain to annual environmental drivers, such as temperature fluctuations, periodic reservoir loading, and precipitation patterns. The Trend component ($T_t$) isolates long-term geodynamic behavior, revealing potential structural settlements or stabilization patterns that are often masked by high-amplitude seasonal oscillations. Finally, residuals ($R_t$) provide a measure of the signal-to-noise ratio, where low residual values indicate a high degree of fit for the decomposition model.
 
 As shown in Figure~\ref{fig:stl}, the STL decomposition was applied to the vertical displacement ($d_V$) for each cluster. This allowed for a clear distinction between the stable, seasonally-driven behavior of the concrete dam body and the continuous settlement trends observed in the natural terrain and abutment zones.
-
-
-To further explore the temporal dynamics of the displacement signals, STL decomposition was applied to the cluster-mean series from DTW-Hierarchical clustering. Trend, seasonal, and residual components are presented for each cluster (Figure~\ref{fig:stl}).
 
 \begin{figure}[h!]  % h! tenta colocar a figura aqui
     \centering
@@ -685,28 +773,28 @@ To further explore the temporal dynamics of the displacement signals, STL decomp
 % \afterpage{\clearpage}
 \subsubsection{Multivariate Correlation Analysis}
 
-To explore the relationship between deformation patterns and external drivers, multivariate pair plots were generated. This allowed for a simultaneous correlation analysis between the InSAR-derived displacements ($d_V$, $d_H$) and environmental variables (temperature, reservoir level, and precipitation). The diagonal shows the distribution of each variable. The lower triangle presents scatter plots with linear regression lines, while the upper triangle displays Pearson correlation coefficients ($r$).
+To explore the relationship between deformation patterns and external variables, multivariate pair plots were generated (Figures~\ref{fig:correl1}, \ref{fig:correl2} and \ref{fig:correl3}). This allowed for a simultaneous correlation analysis between the InSAR-derived displacements ($d_V$, $d_H$) and environmental variables (temperature, reservoir level and precipitation). The diagonal shows the distribution of each variable. The lower triangle presents scatter plots with linear regression lines, while the upper triangle displays Pearson correlation coefficients ($r$).
 
-This step was fundamental to identify the physical forcing mechanisms dominant in each cluster and to validate the interpretability of the clustering results in the context of dam behavior.
+% This step was fundamental to identify the physical forcing mechanisms dominant in each cluster and to validate the interpretability of the clustering results in the context of dam behavior.
 
 
 \begin{figure}[h!] 
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/corr_1.pdf} 
+    \includegraphics[width=0.6\textwidth]{figures/corr_1.pdf} 
     \caption{Multivariate correlation matrix for Cluster 1 (Main Dam Body).}
     \label{fig:correl1}
 \end{figure}
 
 \begin{figure}[h!] 
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/corr_2.pdf} 
+    \includegraphics[width=0.6\textwidth]{figures/corr_2.pdf} 
     \caption{Multivariate correlation matrix for Cluster 2 (Right Abutment/Slopes).}
     \label{fig:correl2}
 \end{figure}
 
 \begin{figure}[h!] 
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/corr_3.pdf} 
+    \includegraphics[width=0.6\textwidth]{figures/corr_3.pdf} 
     \caption{Multivariate correlation matrix (Pair Plot) for Cluster 3 (Left Abutment/Foundation).}
     \label{fig:correl3}
 \end{figure}
@@ -714,28 +802,30 @@ This step was fundamental to identify the physical forcing mechanisms dominant i
 
 \subsubsection{Discussion of Results}
 
-The spatial and temporal analysis of vertical displacements ($d_V$) at the Alqueva Dam identified three distinct behavioral patterns, validated by the application of the Hierarchical Clustering algorithm using the DTW metric.
+The spatial and temporal analysis of vertical displacements ($d_V$) at the Alqueva Dam identified three distinct behavioral patterns. The methodology effectively distinguished between the structural concrete elements and the surrounding natural terrain. 
 
-1. Cluster Characterization and Environmental Drivers
+Cluster 1 (Dam body?), characterized by a strong positive correlation with ambient temperature ($r = 0.87$), represents the exposed concrete surface where deformation is primarily driven by thermoelastic expansion and contraction cycles. Furthermore, the moderate negative correlation with the reservoir level ($r = -0.42$)  characterizes the mechanical response of the arch-gravity structure to hydrostatic pressure. As the water level rises, the increasing load induces a downstream deflection; due to the dam's arch geometry and subsequent crest rotation, this motion is captured by the InSAR sensor as a slight vertical settlement ($d_V$) (\hl{\mbox embora seja verdade, tentar encontrar referência para isto.}).
 
-The methodology effectively distinguished between the structural concrete elements and the surrounding natural terrain. Cluster 1 , characterized by a strong positive correlation with ambient temperature ($r = 0.87$), represents the exposed concrete surface where deformation is primarily driven by thermoelastic expansion and contraction cycles. Furthermore, the moderate negative correlation with the reservoir level ($r = -0.42$)  characterizes the mechanical response of the arch-gravity structure to hydrostatic pressure. As the water level rises, the increasing load induces a downstream deflection; due to the dam's arch geometry and subsequent crest rotation, this motion is captured by the InSAR sensor as a slight vertical settlement ($d_V$). This highlights the high sensitivity of satellite-based InSAR in monitoring complex soil-structure-water interactions. Moving beyond conventional averaged analysis, the cell-by-cell correlation validated the homogeneity of the thermal response across the dam wall. The high statistical significance ($p < 0.05$) across the identified cells reinforces the reliability of EGMS data for monitoring critical infrastructure, providing a continuous spatial overview of structural behavior that complements traditional local instrumentation.
+% This highlights the high sensitivity of satellite-based InSAR in monitoring complex soil-structure-water interactions. Moving beyond conventional averaged analysis, the cell-by-cell correlation validated the homogeneity of the thermal response across the dam wall. The high statistical significance ($p < 0.05$) across the identified cells reinforces the reliability of EGMS data for monitoring critical infrastructure, providing a continuous spatial overview of structural behavior that complements traditional local instrumentation.
 
-Cluster 2 (Settlement Trend) is characterized by a continuous and linear downward trend, visible in both the observed data and the Trend component of the STL decomposition. Interestingly, it shows a near-perfect negative correlation ($r = -0.95$) with Annual Accumulated Precipitation, which may indicate long-term consolidation processes or a delayed hydrological response in specific areas of the abutments or adjacent natural terrain.
+Cluster 2 (Settlement Trend?) is characterized by a continuous and linear downward trend, visible in both the observed data and the Trend component of the STL decomposition. Interestingly, it shows a near-perfect negative correlation ($r = -0.95$) with Accumulated Precipitation, which may indicate long-term consolidation processes or a delayed hydrological response in specific areas of the abutments or adjacent natural terrain.
 
-Cluster 3 (Geodynamic Response) represents the terrain surrounding the reservoir. While it maintains a seasonal response to temperature ($r = 0.13$), its Trend component shows a moderate decline over the years. The correlation with the Reservoir Level is negative ($r = -0.46$), suggesting that the filling of the reservoir may induce minor settlements due to hydrostatic loading on the banks.
+Cluster 3 (Geodynamic Response?) represents the terrain surrounding the reservoir. While it maintains a seasonal response to temperature ($r = 0.13$), its Trend component shows a moderate decline over the years. The correlation with the Reservoir Level is negative ($r = -0.46$), suggesting that the filling of the reservoir may induce minor settlements due to hydrostatic loading on the banks.
 
 The STL decomposition effectively isolated the signal from the noise, with residuals generally remaining below 0.4~mm. The seasonal component is consistent across all clusters, but the Trend component clearly differentiates the structural stability of the concrete dam (Cluster 1) from the more persistent movements detected in Clusters 2 and 3.
 
 
 \section{Conclusion}
 
-This study demonstrates the effectiveness of integrating InSAR data with machine learning for infrastructure monitoring. The DTW-based algorithm successfully distinguished the cyclical thermoelastic response of the dam (Cluster 1) from localized settlement trends (Cluster 2) and natural terrain responses (Cluster 3).The strong correlations between displacements and environmental variables validate the physical origin of the InSAR signals. Methodologically, combining STL decomposition with multivariate analysis proved fundamental in isolating millimetric movements, offering a cost-effective and spatially continuous alternative to traditional monitoring displacement systems.
+This study demonstrates the effectiveness of integrating InSAR data with machine learning for infrastructure monitoring. The DTW-based algorithm successfully distinguished the cyclical thermoelastic response of the dam (Cluster 1) from localized settlement trends (Cluster 2) and natural terrain responses (Cluster 3).
+
+The strong correlations between displacements and environmental variables validate the physical origin of the InSAR signals. Methodologically, combining STL decomposition with multivariate analysis proved fundamental in isolating millimetric movements, offering a cost-effective and spatially continuous alternative to traditional monitoring displacement systems.
 
 % \hl{\mbox .}
 
-Data availability:
+% Data availability:
 
-The datasets analysed during this study are publicly available through the European Ground Motion Service (EGMS) platform (https://egms.land.copernicus.eu/). To ensure the reproducibility of the results, the specific product identifiers used for the Alqueva Dam site are listed below:
+% The datasets analysed during this study are publicly available through the European Ground Motion Service (EGMS) platform (https://egms.land.copernicus.eu/). To ensure the reproducibility of the results, the specific product identifiers used for the Alqueva Dam site are listed below:
 
 \section*{Data Availability}
 
